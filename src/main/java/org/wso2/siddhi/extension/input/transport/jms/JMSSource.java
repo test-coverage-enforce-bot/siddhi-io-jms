@@ -26,8 +26,9 @@ import org.wso2.carbon.transport.jms.utils.JMSConstants;
 import org.wso2.siddhi.annotation.Extension;
 import org.wso2.siddhi.core.config.ExecutionPlanContext;
 import org.wso2.siddhi.core.exception.ConnectionUnavailableException;
-import org.wso2.siddhi.core.stream.input.source.InputTransport;
+import org.wso2.siddhi.core.stream.input.source.Source;
 import org.wso2.siddhi.core.stream.input.source.SourceEventListener;
+import org.wso2.siddhi.core.util.config.ConfigReader;
 import org.wso2.siddhi.core.util.transport.OptionHolder;
 
 import java.util.Arrays;
@@ -37,11 +38,11 @@ import java.util.Map;
 
 @Extension(
         name = "jms",
-        namespace = "inputtransport",
+        namespace = "source",
         description = "JMS Input Transport"
 )
-public class JMSInputTransport extends InputTransport {
-    private static final Logger log = Logger.getLogger(JMSInputTransport.class);
+public class JMSSource extends Source {
+    private static final Logger log = Logger.getLogger(JMSSource.class);
     private final int DEFAULT_THREAD_POOL_SIZE = 1;
     private SourceEventListener sourceEventListener;
     private OptionHolder optionHolder;
@@ -51,7 +52,7 @@ public class JMSInputTransport extends InputTransport {
 
     @Override
     public void init(SourceEventListener sourceEventListener, OptionHolder optionHolder,
-                     ExecutionPlanContext executionPlanContext) {
+                     ConfigReader configReader, ExecutionPlanContext executionPlanContext) {
         this.sourceEventListener = sourceEventListener;
         this.optionHolder = optionHolder;
         // todo: thread pool size should be read from the configuration file, since it's not available at the time of

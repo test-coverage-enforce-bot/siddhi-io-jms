@@ -31,12 +31,12 @@ import org.wso2.siddhi.extension.input.transport.jms.client.JMSClient;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JMSInputTransportTestCase {
+public class JMSSourceTestCase {
     private final String PROVIDER_URL = "vm://localhost?broker.persistent=false";
     private List<String> receivedEventNameList;
 
     @Test
-    public void TestJMSTopicInputTransport() throws InterruptedException {
+    public void TestJMSTopicSource() throws InterruptedException {
         receivedEventNameList = new ArrayList<>(2);
 
         // starting the ActiveMQ broker
