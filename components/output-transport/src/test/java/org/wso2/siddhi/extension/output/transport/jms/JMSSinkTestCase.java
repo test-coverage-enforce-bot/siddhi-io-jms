@@ -49,7 +49,7 @@ public class JMSSinkTestCase {
                 + "destination='DAS_JMS_OUTPUT_TEST', "
                 + "connection.factory.type='queue',"
                 + "connection.factory.jndi.name='QueueConnectionFactory'"
-                +")" +
+                + ")" +
                 "define stream inputStream (name string, age int, country string);";
         ExecutionPlanRuntime executionPlanRuntime = siddhiManager.
                 createExecutionPlanRuntime(inStreamDefinition);

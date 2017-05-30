@@ -32,11 +32,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JMSSourceTestCase {
-    private final String PROVIDER_URL = "vm://localhost?broker.persistent=false";
+    private static final String PROVIDER_URL = "vm://localhost?broker.persistent=false";
     private List<String> receivedEventNameList;
 
     @Test
-    public void TestJMSTopicSource() throws InterruptedException {
+    public void testJMSTopicSource() throws InterruptedException {
         receivedEventNameList = new ArrayList<>(2);
 
         // starting the ActiveMQ broker

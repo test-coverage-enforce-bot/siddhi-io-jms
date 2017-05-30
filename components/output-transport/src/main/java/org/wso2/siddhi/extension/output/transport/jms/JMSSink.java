@@ -18,6 +18,7 @@
  */
 package org.wso2.siddhi.extension.output.transport.jms;
 
+import org.apache.log4j.Logger;
 import org.wso2.carbon.transport.jms.sender.JMSClientConnector;
 import org.wso2.carbon.transport.jms.utils.JMSConstants;
 import org.wso2.siddhi.annotation.Example;
@@ -36,18 +37,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.RejectedExecutionException;
 
+/**
+ * JMS output transport class.
+ * Dynamic options: destination
+ */
 @Extension(
         name = "jms",
         namespace = "sink",
         description = "JMS Output Transport",
         examples = @Example(description = "TBD", syntax = "TBD")
 )
-/**
- * JMS output transport class.
- * Dynamic options: destination
- */
 public class JMSSink extends Sink {
+    private static final Logger log = Logger.getLogger(JMSSink.class);
     private OptionHolder optionHolder;
     private JMSClientConnector clientConnector;
     private Option destination;
@@ -79,9 +82,16 @@ public class JMSSink extends Sink {
     }
 
     @Override
-    public void publish(Object payload, DynamicOptions transportOptions) throws ConnectionUnavailableException {
+    public void publish(Object payload, DynamicOptions transportOptions) {
         String topicQueueName = destination.getValue(transportOptions);
-        executorService.submit(new JMSPublisher(topicQueueName, jmsStaticProperties, clientConnector, payload));
+        try {
+            executorService.submit(new JMSPublisher(topicQueueName, jmsStaticProperties, clientConnector, payload));
+        } catch (RejectedExecutionException e) {
+            //No need to retry as we are using an unbounded queue. Only place this can happen is when the executor
+            // service is shutting down. In such cases we can't anyway handle the exception. Hence logging.
+            log.error("Error occured when submitting following payload to be published via JMS. Payload : " + payload
+                    .toString(), e);
+        }
     }
 
     @Override

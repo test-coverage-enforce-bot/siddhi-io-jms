@@ -36,9 +36,9 @@ public class JMSPublisher implements Runnable {
     private static final Logger log = Logger.getLogger(JMSPublisher.class);
 
     // this field has to be set for the TextCarbonMessage for it to work
-    private final static String MESSAGE_TYPE_FIELD = "JMS_MESSAGE_TYPE";
-    private final static String TEXT_MESSAGE_TYPE = "TextMessage";
-    private final static String BYTEARRAY_MESSAGE_TYPE = "ByteMessage";
+    private static final String MESSAGE_TYPE_FIELD = "JMS_MESSAGE_TYPE";
+    private static final String TEXT_MESSAGE_TYPE = "TextMessage";
+    private static final String BYTE_ARRAY_MESSAGE_TYPE = "ByteMessage";
 
     private Map<String, String> jmsProperties;
     private JMSClientConnector jmsClientConnector;
@@ -75,7 +75,7 @@ public class JMSPublisher implements Runnable {
             return mapCarbonMessage;
         } else if (payload instanceof Byte[]) {
             TextCarbonMessage byteCarbonMessage = new TextCarbonMessage(payload.toString());
-            this.jmsProperties.put(MESSAGE_TYPE_FIELD, BYTEARRAY_MESSAGE_TYPE);
+            this.jmsProperties.put(MESSAGE_TYPE_FIELD, BYTE_ARRAY_MESSAGE_TYPE);
             return byteCarbonMessage;
         } else {
             throw new RuntimeException(

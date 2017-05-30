@@ -36,18 +36,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * JMS Source implementation.
+ */
 @Extension(
         name = "jms",
         namespace = "source",
         description = "JMS Source",
         examples = @Example(description = "TBD", syntax = "TBD")
 )
-/**
- * JMS Source implementation.
- */
 public class JMSSource extends Source {
     private static final Logger log = Logger.getLogger(JMSSource.class);
-    private final int DEFAULT_THREAD_POOL_SIZE = 1;
+    private static final int DEFAULT_THREAD_POOL_SIZE = 1;
     private SourceEventListener sourceEventListener;
     private OptionHolder optionHolder;
     private JMSServerConnector jmsServerConnector;
