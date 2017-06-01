@@ -34,7 +34,7 @@
     <modules>       
         <module>components/input-transport</module>
 	    <module>components/output-transport</module>
-	    <module>features/org.wso2.siddhi.extension.io.jms</module>
+	    <module>features/org.wso2.extension.siddhi.io.jms</module>
     </modules>
 
     <dependencyManagement>
