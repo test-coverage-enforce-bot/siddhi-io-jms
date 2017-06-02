@@ -40,14 +40,14 @@ public class JMSOptionsMapper {
      *
      * @return map of custom mapping
      */
-    public static Map<String, String> getCustomPropertyMapping() {
-        Map<String, String> customPropertyMapping = new HashMap<>();
-        customPropertyMapping.put(DESTINATION, JMSConstants.DESTINATION_PARAM_NAME);
-        customPropertyMapping.put(CONNECTION_FACTORY_JNDI_NAME, JMSConstants.CONNECTION_FACTORY_JNDI_PARAM_NAME);
-        customPropertyMapping.put(FACTORY_INITIAL, JMSConstants.NAMING_FACTORY_INITIAL_PARAM_NAME);
-        customPropertyMapping.put(PROVIDER_URL, JMSConstants.PROVIDER_URL_PARAM_NAME);
-        customPropertyMapping.put(CONNECTION_FACTORY_TYPE, JMSConstants.CONNECTION_FACTORY_TYPE_PARAM_NAME);
-        return customPropertyMapping;
+    public static Map<String, String> getCarbonPropertyMapping() {
+        Map<String, String> carbonPropertyMapping = new HashMap<>();
+        carbonPropertyMapping.put(DESTINATION, JMSConstants.DESTINATION_PARAM_NAME);
+        carbonPropertyMapping.put(CONNECTION_FACTORY_JNDI_NAME, JMSConstants.CONNECTION_FACTORY_JNDI_PARAM_NAME);
+        carbonPropertyMapping.put(FACTORY_INITIAL, JMSConstants.NAMING_FACTORY_INITIAL_PARAM_NAME);
+        carbonPropertyMapping.put(PROVIDER_URL, JMSConstants.PROVIDER_URL_PARAM_NAME);
+        carbonPropertyMapping.put(CONNECTION_FACTORY_TYPE, JMSConstants.CONNECTION_FACTORY_TYPE_PARAM_NAME);
+        return carbonPropertyMapping;
     }
 
     /**

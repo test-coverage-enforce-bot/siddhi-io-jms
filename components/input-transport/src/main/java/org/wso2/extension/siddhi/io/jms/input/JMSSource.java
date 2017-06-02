@@ -47,7 +47,8 @@ import java.util.Map;
 )
 public class JMSSource extends Source {
     private static final Logger log = Logger.getLogger(JMSSource.class);
-    private static final int DEFAULT_THREAD_POOL_SIZE = 1;
+    private static final String THREAD_POOL_SIZE = "jms.source.thread.pool.size";
+    private static final String DEFAULT_THREAD_POOL_SIZE = "1";
     private SourceEventListener sourceEventListener;
     private OptionHolder optionHolder;
     private JMSServerConnector jmsServerConnector;
@@ -59,9 +60,7 @@ public class JMSSource extends Source {
                      ConfigReader configReader, ExecutionPlanContext executionPlanContext) {
         this.sourceEventListener = sourceEventListener;
         this.optionHolder = optionHolder;
-        // todo: thread pool size should be read from the configuration file, since it's not available at the time of
-        // this impl, it's hardcoded.
-        this.threadPoolSize = DEFAULT_THREAD_POOL_SIZE;
+        threadPoolSize = Integer.parseInt(configReader.readConfig(THREAD_POOL_SIZE, DEFAULT_THREAD_POOL_SIZE));
     }
 
     @Override
@@ -75,6 +74,7 @@ public class JMSSource extends Source {
         } catch (ServerConnectorException e) {
             log.error("Exception in starting the JMS receiver for stream: "
                     + sourceEventListener.getStreamDefinition().getId(), e);
+            //todo: retry??
         }
     }
 
@@ -111,12 +111,12 @@ public class JMSSource extends Source {
      * @return all the options map.
      */
     private Map<String, String> initJMSProperties() {
-        Map<String, String> customPropertyMapping = JMSOptionsMapper.getCustomPropertyMapping();
+        Map<String, String> carbonPropertyMapping = JMSOptionsMapper.getCarbonPropertyMapping();
         List<String> requiredOptions = JMSOptionsMapper.getRequiredOptions();
         // getting the required values
         Map<String, String> transportProperties = new HashMap<>();
         requiredOptions.forEach(requiredOption ->
-                transportProperties.put(customPropertyMapping.get(requiredOption),
+                transportProperties.put(carbonPropertyMapping.get(requiredOption),
                         optionHolder.validateAndGetStaticValue(requiredOption)));
         // getting optional values
         optionHolder.getStaticOptionsKeys().stream()
