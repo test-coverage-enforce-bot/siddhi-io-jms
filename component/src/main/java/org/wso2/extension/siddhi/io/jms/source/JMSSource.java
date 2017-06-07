@@ -23,7 +23,7 @@ import org.wso2.carbon.messaging.exceptions.ServerConnectorException;
 import org.wso2.carbon.transport.jms.exception.JMSConnectorException;
 import org.wso2.carbon.transport.jms.receiver.JMSServerConnector;
 import org.wso2.carbon.transport.jms.utils.JMSConstants;
-import org.wso2.extension.siddhi.io.jms.source.util.JMSOptionsMapper;
+import org.wso2.extension.siddhi.io.jms.util.JMSOptionsMapper;
 import org.wso2.siddhi.annotation.Example;
 import org.wso2.siddhi.annotation.Extension;
 import org.wso2.siddhi.core.config.ExecutionPlanContext;
