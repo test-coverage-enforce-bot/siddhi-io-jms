@@ -15,7 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.extension.siddhi.io.jms.input.client;
+package org.wso2.extension.siddhi.io.jms.source.client;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

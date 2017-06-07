@@ -16,7 +16,7 @@
  *  under the License.
  *
  */
-package org.wso2.extension.siddhi.io.jms.output;
+package org.wso2.extension.siddhi.io.jms.sink;
 
 import org.apache.log4j.Logger;
 import org.wso2.carbon.messaging.CarbonMessage;

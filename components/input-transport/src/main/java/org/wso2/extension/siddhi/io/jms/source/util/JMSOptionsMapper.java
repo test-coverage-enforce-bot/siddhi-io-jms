@@ -16,7 +16,7 @@
  *  under the License.
  *
  */
-package org.wso2.extension.siddhi.io.jms.input.util;
+package org.wso2.extension.siddhi.io.jms.source.util;
 
 import org.wso2.carbon.transport.jms.utils.JMSConstants;
 

@@ -16,7 +16,7 @@
  *  under the License.
  *
  */
-package org.wso2.extension.siddhi.io.jms.input.exception;
+package org.wso2.extension.siddhi.io.jms.source.exception;
 
 /**
  * JMS input adaptor specific exception.

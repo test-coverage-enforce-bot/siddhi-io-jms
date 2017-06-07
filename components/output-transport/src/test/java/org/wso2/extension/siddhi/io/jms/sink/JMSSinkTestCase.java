@@ -16,11 +16,11 @@
  *  under the License.
  *
  */
-package org.wso2.extension.siddhi.io.jms.output;
+package org.wso2.extension.siddhi.io.jms.sink;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.wso2.extension.siddhi.io.jms.output.util.JMSClient;
+import org.wso2.extension.siddhi.io.jms.sink.util.JMSClient;
 import org.wso2.siddhi.core.ExecutionPlanRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.stream.input.InputHandler;

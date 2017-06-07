@@ -15,7 +15,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.wso2.extension.siddhi.io.jms.output.util;
+package org.wso2.extension.siddhi.io.jms.sink.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,39 +28,41 @@ import javax.jms.JMSException;
 import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
-import javax.jms.QueueConnection;
-import javax.jms.QueueConnectionFactory;
 import javax.jms.Session;
 import javax.jms.TextMessage;
+import javax.jms.TopicConnection;
+import javax.jms.TopicConnectionFactory;
 
-public class QueueConsumer implements Runnable {
-
-    private QueueConnectionFactory queueConnectionFactory;
-    private String queueName;
+/**
+ * Consumes JMS topic messages.
+ */
+public class TopicConsumer implements Runnable {
+    private TopicConnectionFactory topicConnectionFactory;
+    private String topicName;
     private boolean active = true;
-    private static Log log = LogFactory.getLog(QueueConsumer.class);
+    private static Log log = LogFactory.getLog(TopicConsumer.class);
 
-    public QueueConsumer(QueueConnectionFactory queueConnectionFactory, String queueName) {
-        this.queueConnectionFactory = queueConnectionFactory;
-        this.queueName = queueName;
+    public TopicConsumer(TopicConnectionFactory topicConnectionFactory, String topicName) {
+        this.topicConnectionFactory = topicConnectionFactory;
+        this.topicName = topicName;
     }
 
     public void run() {
-        // create queue connection
-        QueueConnection queueConnection = null;
+        // create topic connection
+        TopicConnection topicConnection = null;
         try {
-            queueConnection = queueConnectionFactory.createQueueConnection();
-            queueConnection.start();
+            topicConnection = topicConnectionFactory.createTopicConnection();
+            topicConnection.start();
         } catch (JMSException e) {
-            log.error("Can not create queue connection." + e.getMessage(), e);
+            log.error("Can not create topic connection." + e.getMessage(), e);
             return;
         }
-        Session session;
+        Session session = null;
         try {
-            session = queueConnection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
-            Destination destination = session.createQueue(queueName);
+            session = topicConnection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
+            Destination destination = session.createTopic(topicName);
             MessageConsumer consumer = session.createConsumer(destination);
-            log.info("Listening for messages at " + queueName);
+            log.info("Listening for messages");
             while (active) {
                 Message message = consumer.receive(1000);
                 if (message != null) {
@@ -72,18 +74,18 @@ public class QueueConsumer implements Runnable {
                             String key = (String) enumeration.nextElement();
                             map.put(key, mapMessage.getObject(key));
                         }
-                        log.info("Received Map Message: " + map);
+                        log.info("Received Map Message : " + map);
                     } else if (message instanceof TextMessage) {
-                        log.info("Received Text Message: " + ((TextMessage) message).getText());
+                        log.info("Received Text Message : " + ((TextMessage) message).getText());
                     } else {
-                        log.info("Received message: " + message.toString());
+                        log.info("Received message : " + message.toString());
                     }
                 }
             }
             log.info("Finished listening for messages.");
             session.close();
-            queueConnection.stop();
-            queueConnection.close();
+            topicConnection.stop();
+            topicConnection.close();
         } catch (JMSException e) {
             log.error("Can not subscribe." + e.getMessage(), e);
         }
@@ -92,5 +94,4 @@ public class QueueConsumer implements Runnable {
     public void shutdown() {
         active = false;
     }
-
 }

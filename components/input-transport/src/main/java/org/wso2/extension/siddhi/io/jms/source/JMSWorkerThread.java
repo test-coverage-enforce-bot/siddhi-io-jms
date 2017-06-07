@@ -16,13 +16,13 @@
  *  under the License.
  *
  */
-package org.wso2.extension.siddhi.io.jms.input;
+package org.wso2.extension.siddhi.io.jms.source;
 
 import org.wso2.carbon.messaging.CarbonCallback;
 import org.wso2.carbon.messaging.CarbonMessage;
 import org.wso2.carbon.messaging.MapCarbonMessage;
 import org.wso2.carbon.messaging.TextCarbonMessage;
-import org.wso2.extension.siddhi.io.jms.input.exception.JMSInputAdaptorRuntimeException;
+import org.wso2.extension.siddhi.io.jms.source.exception.JMSInputAdaptorRuntimeException;
 import org.wso2.siddhi.core.stream.input.source.SourceEventListener;
 
 import java.util.Enumeration;

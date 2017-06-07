@@ -16,12 +16,12 @@
  *  under the License.
  *
  */
-package org.wso2.extension.siddhi.io.jms.input;
+package org.wso2.extension.siddhi.io.jms.source;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.junit.Assert;
 import org.junit.Test;
-import org.wso2.extension.siddhi.io.jms.input.client.JMSClient;
+import org.wso2.extension.siddhi.io.jms.source.client.JMSClient;
 import org.wso2.siddhi.core.ExecutionPlanRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.event.Event;
