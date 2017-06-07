@@ -134,9 +134,7 @@
                         <Private-Package>
                             org.wso2.carbon.transport.jms.*,
                             org.apache.commons.pool2.*,
-                            org.wso2.extension.siddhi.io.jms.internal.*,
-                            org.apache.activemq.*,
-                            javax.jms.*
+                            org.wso2.extension.siddhi.io.jms.internal.*
                         </Private-Package>
                         <Export-Package>
                             org.wso2.extension.siddhi.io.jms.*
