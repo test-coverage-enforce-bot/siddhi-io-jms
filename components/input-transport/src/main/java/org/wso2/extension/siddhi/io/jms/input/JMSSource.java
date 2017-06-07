@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 import org.wso2.carbon.messaging.exceptions.ServerConnectorException;
 import org.wso2.carbon.transport.jms.exception.JMSConnectorException;
 import org.wso2.carbon.transport.jms.receiver.JMSServerConnector;
+import org.wso2.carbon.transport.jms.utils.JMSConstants;
 import org.wso2.extension.siddhi.io.jms.input.util.JMSOptionsMapper;
 import org.wso2.siddhi.annotation.Example;
 import org.wso2.siddhi.annotation.Extension;
@@ -47,27 +48,31 @@ import java.util.Map;
 )
 public class JMSSource extends Source {
     private static final Logger log = Logger.getLogger(JMSSource.class);
-    private static final String THREAD_POOL_SIZE = "jms.source.thread.pool.size";
-    private static final String DEFAULT_THREAD_POOL_SIZE = "1";
     private SourceEventListener sourceEventListener;
     private OptionHolder optionHolder;
     private JMSServerConnector jmsServerConnector;
     private JMSMessageProcessor jmsMessageProcessor;
-    private int threadPoolSize;
+    private ExecutionPlanContext executionPlanContext;
+    private static final String THREAD_COUNT = "worker.count";
+    private static final String DEFAULT_THREAD_COUNT = "1";
+    private int concurrentConsumers;
 
     @Override
     public void init(SourceEventListener sourceEventListener, OptionHolder optionHolder,
                      ConfigReader configReader, ExecutionPlanContext executionPlanContext) {
         this.sourceEventListener = sourceEventListener;
         this.optionHolder = optionHolder;
-        threadPoolSize = Integer.parseInt(configReader.readConfig(THREAD_POOL_SIZE, DEFAULT_THREAD_POOL_SIZE));
+        concurrentConsumers = Integer.parseInt(optionHolder.validateAndGetStaticValue(THREAD_COUNT,
+                                                                                      DEFAULT_THREAD_COUNT));
+        this.executionPlanContext = executionPlanContext;
     }
 
     @Override
     public void connect() throws ConnectionUnavailableException {
+
         Map<String, String> properties = initJMSProperties();
         jmsServerConnector = new JMSServerConnector(properties);
-        jmsMessageProcessor = new JMSMessageProcessor(sourceEventListener, threadPoolSize);
+        jmsMessageProcessor = new JMSMessageProcessor(sourceEventListener, executionPlanContext);
         jmsServerConnector.setMessageProcessor(jmsMessageProcessor);
         try {
             jmsServerConnector.start();
@@ -122,6 +127,7 @@ public class JMSSource extends Source {
         optionHolder.getStaticOptionsKeys().stream()
                 .filter(option -> !requiredOptions.contains(option) && !option.equals("type")).forEach(option ->
                 transportProperties.put(option, optionHolder.validateAndGetStaticValue(option)));
+        transportProperties.put(JMSConstants.CONCURRENT_CONSUMERS, String.valueOf(concurrentConsumers));
         return transportProperties;
     }
 

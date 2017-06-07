@@ -162,4 +162,125 @@ public class JMSClient {
             log.error("Error when publishing" + e.getMessage(), e);
         }
     }
+
+    public void sendJMSEvents(List<String> messageList, String topicName, String queueName, String format,
+                              String broker, String providerURL) {
+        if (format == null || "map".equals(format)) {
+            format = "csv";
+        }
+        if ("".equalsIgnoreCase(broker)) {
+            broker = "activemq";
+        }
+        Session session = null;
+        Properties properties = new Properties();
+        if (!"activemq".equalsIgnoreCase(broker) && !"mb".equalsIgnoreCase(broker) && !"qpid".equalsIgnoreCase
+                (broker)) {
+            log.error("Please enter a valid JMS message broker. (ex: activemq, mb, qpid");
+            return;
+        }
+        try {
+            if (topicName != null && !"".equalsIgnoreCase(topicName)) {
+                TopicConnection topicConnection;
+                TopicConnectionFactory connFactory = null;
+                if ("activemq".equalsIgnoreCase(broker)) {
+                    properties.load(ClassLoader.getSystemClassLoader().getResourceAsStream("activemq.properties"));
+                    // to provide custom provider urls
+                    if (providerURL != null) {
+                        properties.put(Context.PROVIDER_URL, providerURL);
+                    }
+                    Context context = new InitialContext(properties);
+                    connFactory = (TopicConnectionFactory) context.lookup("ConnectionFactory");
+                } else if ("mb".equalsIgnoreCase(broker)) {
+                    properties.load(ClassLoader.getSystemClassLoader().getResourceAsStream("mb.properties"));
+                    Context context = new InitialContext(properties);
+                    connFactory = (TopicConnectionFactory) context.lookup("qpidConnectionFactory");
+                } else if ("qpid".equalsIgnoreCase(broker)) {
+                    properties.load(ClassLoader.getSystemClassLoader().getResourceAsStream("qpid.properties"));
+                    Context context = new InitialContext(properties);
+                    connFactory = (TopicConnectionFactory) context.lookup("qpidConnectionFactory");
+                }
+                if (connFactory != null) {
+                    topicConnection = connFactory.createTopicConnection();
+                    topicConnection.start();
+                    session = topicConnection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
+                    if (session != null) {
+                        Topic topic = session.createTopic(topicName);
+                        MessageProducer producer = session.createProducer(topic);
+                        //List<String> messagesList = JMSClientUtil.readFile(filePath);
+                        try {
+                            if ("csv".equalsIgnoreCase(format)) {
+                                log.info("Sending Map messages on '" + topicName + "' topic");
+                                JMSClientUtil.publishMapMessage(producer, session, messageList);
+
+                            } else {
+                                log.info("Sending  " + format + " messages on '" + topicName + "' topic");
+                                JMSClientUtil.publishTextMessage(producer, session, messageList);
+                            }
+                            log.info("All Order Messages sent");
+                        } catch (JMSException e) {
+                            log.error("Cannot subscribe." + e.getMessage(), e);
+                        } catch (IOException e) {
+                            log.error("Error when reading the data file." + e.getMessage(), e);
+                        } finally {
+                            producer.close();
+                            session.close();
+                            topicConnection.stop();
+                        }
+                    }
+                } else {
+                    log.error("Error when creating connection factory. Please check necessary jar files");
+                }
+            } else if (queueName != null && !queueName.equalsIgnoreCase("")) {
+                QueueConnection queueConnection;
+                QueueConnectionFactory connFactory = null;
+                if ("activemq".equalsIgnoreCase(broker)) {
+                    properties.load(ClassLoader.getSystemClassLoader().getResourceAsStream("activemq.properties"));
+                    Context context = new InitialContext(properties);
+                    connFactory = (QueueConnectionFactory) context.lookup("ConnectionFactory");
+                } else if ("mb".equalsIgnoreCase(broker)) {
+                    properties.load(ClassLoader.getSystemClassLoader().getResourceAsStream("mb.properties"));
+                    Context context = new InitialContext(properties);
+                    connFactory = (QueueConnectionFactory) context.lookup("qpidConnectionFactory");
+                } else if ("qpid".equalsIgnoreCase(broker)) {
+                    properties.load(ClassLoader.getSystemClassLoader().getResourceAsStream("qpid.properties"));
+                    Context context = new InitialContext(properties);
+                    connFactory = (QueueConnectionFactory) context.lookup("qpidConnectionFactory");
+                }
+                if (connFactory != null) {
+                    queueConnection = connFactory.createQueueConnection();
+                    queueConnection.start();
+                    session = queueConnection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
+                    if (session != null) {
+                        Queue queue = session.createQueue(queueName);
+                        MessageProducer producer = session.createProducer(queue);
+                        //List<String> messagesList = JMSClientUtil.readFile(filePath);
+                        try {
+                            if ("csv".equalsIgnoreCase(format)) {
+                                log.info("Sending Map messages on '" + queueName + "' queue");
+                                JMSClientUtil.publishMapMessage(producer, session, messageList);
+
+                            } else {
+                                log.info("Sending  " + format + " messages on '" + queueName + "' queue");
+                                JMSClientUtil.publishTextMessage(producer, session, messageList);
+                            }
+                        } catch (JMSException e) {
+                            log.error("Cannot subscribe." + e.getMessage(), e);
+                        } catch (IOException e) {
+                            log.error("Error when reading the data file." + e.getMessage(), e);
+                        } finally {
+                            producer.close();
+                            session.close();
+                            queueConnection.stop();
+                        }
+                    }
+                } else {
+                    log.error("Error when creating connection factory. Please check necessary jar files");
+                }
+            } else {
+                log.error("Enter queue name or topic name to be published!");
+            }
+        } catch (Exception e) {
+            log.error("Error when publishing" + e.getMessage(), e);
+        }
+    }
 }

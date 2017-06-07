@@ -22,36 +22,74 @@ import org.wso2.carbon.messaging.CarbonCallback;
 import org.wso2.carbon.messaging.CarbonMessage;
 import org.wso2.carbon.messaging.CarbonMessageProcessor;
 import org.wso2.carbon.messaging.ClientConnector;
+import org.wso2.carbon.messaging.MapCarbonMessage;
+import org.wso2.carbon.messaging.TextCarbonMessage;
 import org.wso2.carbon.messaging.TransportSender;
-import org.wso2.extension.siddhi.io.jms.input.executor.PausableThreadPoolExecutor;
+import org.wso2.extension.siddhi.io.jms.input.exception.JMSInputAdaptorRuntimeException;
+import org.wso2.siddhi.core.config.ExecutionPlanContext;
 import org.wso2.siddhi.core.stream.input.source.SourceEventListener;
 
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * This processes the JMS messages using a pausable thread pool.
  */
 public class JMSMessageProcessor implements CarbonMessageProcessor {
-    // this is the maximum time that excess idle threads will wait for new tasks before terminating.
-    // since the threads will exit after each execution, this is set to a minimal value
-    private static final long KEEP_ALIVE_TIME = 10;
-    private static final int MAX_THREAD_POOL_SIZE_MULTIPLIER = 2;
     private SourceEventListener sourceEventListener;
-    private PausableThreadPoolExecutor executor;
     private LinkedBlockingQueue<Runnable> queue;
+    private boolean paused;
+    private ReentrantLock lock;
+    private Condition condition;
 
-    public JMSMessageProcessor(SourceEventListener sourceEventListener, int coreThreadPoolSize) {
+    public JMSMessageProcessor(SourceEventListener sourceEventListener, ExecutionPlanContext
+            executionPlanContext) {
         this.sourceEventListener = sourceEventListener;
         this.queue = new LinkedBlockingQueue<>();
-        int maxThreadPoolSize = MAX_THREAD_POOL_SIZE_MULTIPLIER * coreThreadPoolSize;
-        this.executor = new PausableThreadPoolExecutor(coreThreadPoolSize, maxThreadPoolSize, KEEP_ALIVE_TIME,
-                TimeUnit.SECONDS, queue);
+        lock = new ReentrantLock();
+        condition = lock.newCondition();
     }
 
     @Override
     public boolean receive(CarbonMessage carbonMessage, CarbonCallback carbonCallback) throws Exception {
-        executor.execute(new JMSWorkerThread(carbonMessage, carbonCallback, sourceEventListener));
+        if (paused) { //spurious wakeup condition is deliberately traded off for performance
+            lock.lock();
+            try {
+                condition.await();
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            } finally {
+                lock.unlock();
+            }
+        }
+        try {
+            if (carbonMessage.getClass() == TextCarbonMessage.class) {
+                String event = ((TextCarbonMessage) carbonMessage).getText();
+                sourceEventListener.onEvent(event);
+            } else if (carbonMessage.getClass() == MapCarbonMessage.class) {
+                Map<String, String> event = new HashMap<>();
+                MapCarbonMessage mapCarbonMessage = (MapCarbonMessage) carbonMessage;
+                Enumeration<String> mapNames = mapCarbonMessage.getMapNames();
+                while (mapNames.hasMoreElements()) {
+                    String key = mapNames.nextElement();
+                    event.put(key, mapCarbonMessage.getValue(key));
+                }
+                sourceEventListener.onEvent(event);
+            } else {
+                throw new JMSInputAdaptorRuntimeException("The message type of the JMS message" +
+                                                                  carbonMessage.getClass() + " is not supported!");
+            }
+            // ACK only if the event is processed i.e: no exceptions thrown from the onEvent method.
+            if (carbonCallback != null) {
+                carbonCallback.done(carbonMessage);
+            }
+        } catch (RuntimeException e) {
+            throw new JMSInputAdaptorRuntimeException("Failed to process JMS message.", e);
+        }
         return true;
     }
 
@@ -69,11 +107,17 @@ public class JMSMessageProcessor implements CarbonMessageProcessor {
     }
 
     void pause() {
-        executor.pause();
+        paused = true;
     }
 
     void resume() {
-        executor.resume();
+        paused = false;
+        try {
+            lock.lock();
+            condition.signalAll();
+        } finally {
+            lock.unlock();
+        }
     }
 
     public void clear() {
@@ -85,6 +129,6 @@ public class JMSMessageProcessor implements CarbonMessageProcessor {
     }
 
     void disconnect() {
-        executor.shutdown();
+
     }
 }

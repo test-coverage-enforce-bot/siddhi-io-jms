@@ -17,4 +17,13 @@
   ~ under the License.
   -->
 
-<FindBugsFilter></FindBugsFilter>
+<FindBugsFilter>
+    <Match>
+        <class name="org.wso2.extension.siddhi.io.jms.input.JMSMessageProcessor"/>
+        <Bug pattern="BC_UNCONFIRMED_CAST"/>
+    </Match>
+    <Match>
+        <class name="org.wso2.extension.siddhi.io.jms.input.JMSMessageProcessor"/>
+        <Bug pattern="WA_AWAIT_NOT_IN_LOOP"/>
+    </Match>
+</FindBugsFilter>
