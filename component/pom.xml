@@ -20,16 +20,16 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>org.wso2.extension.siddhi</groupId>
-        <artifactId>siddhi-io-jms</artifactId>
+        <groupId>org.wso2.extension.siddhi.io.jms</groupId>
+        <artifactId>siddhi-io-jms-parent</artifactId>
         <version>4.0.0-M5-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>bundle</packaging>
 
-    <artifactId>siddhi-io-jms-input</artifactId>
-    <name>Siddhi Extension - JMS Input Transport</name>
+    <artifactId>siddhi-io-jms</artifactId>
+    <name>Siddhi Extensio - JMS Transport</name>
 
 
     <dependencies>
@@ -109,6 +109,11 @@
             <artifactId>siddhi-extension-xml-input-mapper</artifactId>
             <version>${siddhi.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.wso2.siddhi</groupId>
+            <artifactId>siddhi-extension-text-output-mapper</artifactId>
+            <version>${text.mapper.version}</version>
+        </dependency>
 
     </dependencies>
 
@@ -123,7 +128,7 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
-                            org.wso2.siddhi.extension.input.transport.jms.*
+                            org.wso2.extension.siddhi.io.jms.*
                         </Export-Package>
                         <Import-Package>
                             *;resolution:=optional
@@ -140,7 +145,6 @@
 
     <properties>
         <text.mapper.version>4.0.0-M4</text.mapper.version>
-
-        <mavan.findbugsplugin.exclude.file>../../findbugs-exclude.xml</mavan.findbugsplugin.exclude.file>
+        <mavan.findbugsplugin.exclude.file>../findbugs-exclude.xml</mavan.findbugsplugin.exclude.file>
     </properties>
 </project>

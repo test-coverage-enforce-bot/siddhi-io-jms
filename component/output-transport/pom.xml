@@ -87,7 +87,7 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
-                            org.wso2.siddhi.extension.output.transport.jms.*
+                            org.wso2.extension.siddhi.io.jms.*
                         </Export-Package>
                         <Import-Package>
                             *;resolution:=optional
