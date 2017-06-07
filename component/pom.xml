@@ -29,7 +29,7 @@
     <packaging>bundle</packaging>
 
     <artifactId>siddhi-io-jms</artifactId>
-    <name>Siddhi Extensio - JMS Transport</name>
+    <name>Siddhi Extension - JMS Transport</name>
 
 
     <dependencies>
@@ -114,7 +114,11 @@
             <artifactId>siddhi-extension-text-output-mapper</artifactId>
             <version>${text.mapper.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-client</artifactId>
+            <version>5.14.5</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -127,6 +131,11 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
+                        <Private-Package>
+                            org.wso2.carbon.transport.jms.*,
+                            org.apache.commons.pool2.*,
+                            org.wso2.extension.siddhi.io.jms.internal.*
+                        </Private-Package>
                         <Export-Package>
                             org.wso2.extension.siddhi.io.jms.*
                         </Export-Package>
