@@ -21,7 +21,7 @@ package org.wso2.extension.siddhi.io.jms.sink;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.wso2.extension.siddhi.io.jms.sink.util.JMSClient;
-import org.wso2.siddhi.core.ExecutionPlanRuntime;
+import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
 import org.wso2.siddhi.core.stream.input.InputHandler;
 
@@ -51,8 +51,8 @@ public class JMSSinkTestCase {
                 + "connection.factory.jndi.name='QueueConnectionFactory'"
                 + ")" +
                 "define stream inputStream (name string, age int, country string);";
-        ExecutionPlanRuntime executionPlanRuntime = siddhiManager.
-                createExecutionPlanRuntime(inStreamDefinition);
+        SiddhiAppRuntime executionPlanRuntime = siddhiManager.
+                createSiddhiAppRuntime(inStreamDefinition);
         InputHandler inputStream = executionPlanRuntime.getInputHandler("inputStream");
         executionPlanRuntime.start();
         inputStream.send(new Object[]{"JAMES", 23, "USA"});

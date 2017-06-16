@@ -26,7 +26,7 @@ import org.wso2.carbon.messaging.MapCarbonMessage;
 import org.wso2.carbon.messaging.TextCarbonMessage;
 import org.wso2.carbon.messaging.TransportSender;
 import org.wso2.extension.siddhi.io.jms.source.exception.JMSInputAdaptorRuntimeException;
-import org.wso2.siddhi.core.config.ExecutionPlanContext;
+import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.stream.input.source.SourceEventListener;
 
 import java.util.Enumeration;
@@ -46,7 +46,7 @@ public class JMSMessageProcessor implements CarbonMessageProcessor {
     private ReentrantLock lock;
     private Condition condition;
 
-    public JMSMessageProcessor(SourceEventListener sourceEventListener, ExecutionPlanContext
+    public JMSMessageProcessor(SourceEventListener sourceEventListener, SiddhiAppContext
             executionPlanContext) {
         this.sourceEventListener = sourceEventListener;
         this.queue = new LinkedBlockingQueue<>();
