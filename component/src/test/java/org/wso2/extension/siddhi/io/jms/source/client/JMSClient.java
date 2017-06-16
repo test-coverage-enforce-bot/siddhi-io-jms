@@ -235,6 +235,10 @@ public class JMSClient {
                 QueueConnectionFactory connFactory = null;
                 if ("activemq".equalsIgnoreCase(broker)) {
                     properties.load(ClassLoader.getSystemClassLoader().getResourceAsStream("activemq.properties"));
+                    // to provide custom provider urls
+                    if (providerURL != null) {
+                        properties.put(Context.PROVIDER_URL, providerURL);
+                    }
                     Context context = new InitialContext(properties);
                     connFactory = (QueueConnectionFactory) context.lookup("ConnectionFactory");
                 } else if ("mb".equalsIgnoreCase(broker)) {
