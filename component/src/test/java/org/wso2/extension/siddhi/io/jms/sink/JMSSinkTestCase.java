@@ -18,8 +18,8 @@
  */
 package org.wso2.extension.siddhi.io.jms.sink;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 import org.wso2.extension.siddhi.io.jms.sink.util.JMSClient;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
