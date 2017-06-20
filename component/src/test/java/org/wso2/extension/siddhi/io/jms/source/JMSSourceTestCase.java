@@ -19,8 +19,6 @@
 package org.wso2.extension.siddhi.io.jms.source;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
-
-
 import org.testng.Assert;
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
@@ -31,7 +29,7 @@ import org.wso2.siddhi.core.event.Event;
 import org.wso2.siddhi.core.query.output.callback.QueryCallback;
 import org.wso2.siddhi.core.util.EventPrinter;
 import org.wso2.siddhi.core.util.SiddhiTestHelper;
-
+import org.wso2.siddhi.query.api.exception.SiddhiAppValidationException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +41,7 @@ public class JMSSourceTestCase {
     private int waitTime = 50;
     private int timeout = 30000;
 
-   @Test
+    @Test
     public void testJMSTopicSource1() throws InterruptedException {
         AtomicInteger eventCount = new AtomicInteger(0);
         receivedEventNameList = new ArrayList<>(2);
@@ -69,7 +67,7 @@ public class JMSSourceTestCase {
                 "select *  " +
                 "insert into outputStream;");
         SiddhiAppRuntime executionPlanRuntime = siddhiManager.createSiddhiAppRuntime(inStreamDefinition +
-                query);
+                                                                                             query);
 
         executionPlanRuntime.addCallback("query1", new QueryCallback() {
             @Override
@@ -93,69 +91,69 @@ public class JMSSourceTestCase {
         AssertJUnit.assertEquals("JMS Source expected input not received", expected, receivedEventNameList);
         siddhiManager.shutdown();
     }
-
-    @Test
-    public void testJMSTopicSource2() throws InterruptedException {
-        AtomicInteger eventCount = new AtomicInteger(0);
-        receivedEventNameList = new ArrayList<>(2);
-
-        // starting the ActiveMQ broker
-        ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(PROVIDER_URL);
-
-        // deploying the execution plan
-        SiddhiManager siddhiManager = new SiddhiManager();
-        String inStreamDefinition = "" +
-                "@source(type='jms', @map(type='xml'), "
-                + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
-                + "provider.url='vm://localhost',"
-                + "destination='DAS_JMS_TEST', "
-                + "connection.factory.type='topic',"
-                + "connection.factory.jndi.name='TopicConnectionFactory',"
-                + "transport.jms.SubscriptionDurable='true', "
-                + "transport.jms.DurableSubscriberClientID='wso2dasclient1'"
-                + ")" +
-                "define stream inputStream (name string, age int, country string);";
-        String query = ("@info(name = 'query1') " +
-                "from inputStream " +
-                "select *  " +
-                "insert into outputStream;");
-        SiddhiAppRuntime executionPlanRuntime = siddhiManager.createSiddhiAppRuntime(inStreamDefinition +
-                                                                                                     query);
-
-        executionPlanRuntime.addCallback("query1", new QueryCallback() {
-            @Override
-            public void receive(long timeStamp, Event[] inEvents, Event[] removeEvents) {
-                EventPrinter.print(timeStamp, inEvents, removeEvents);
-                for (Event event : inEvents) {
-                    eventCount.incrementAndGet();
-                    receivedEventNameList.add(event.getData(0).toString());
-                }
-            }
-        });
-        executionPlanRuntime.start();
-        List<String> messageList = new ArrayList<>(2);
-        messageList.add("<events>\n"
-                        + "    <event>\n"
-                        + "        <name>John</name>\n"
-                        + "        <age>22</age>\n"
-                        + "        <country>US</country>\n"
-                        + "    </event>\n"
-                        + "    <event>\n"
-                        + "        <name>Mike</name>\n"
-                        + "        <age>24</age>\n"
-                        + "        <country>US</country>\n"
-                        + "    </event>\n"
-                        + "</events>");
-        // publishing events
-        publishEvents("DAS_JMS_TEST", null, "activemq", "text", messageList);
-
-        List<String> expected = new ArrayList<>(2);
-        expected.add("John");
-        expected.add("Mike");
-        SiddhiTestHelper.waitForEvents(waitTime, 2, eventCount, timeout);
-        AssertJUnit.assertEquals("JMS Source expected input not received", expected, receivedEventNameList);
-        siddhiManager.shutdown();
-    }
+    //Commenting out till xml mapper is released
+//    @Test
+//    public void testJMSTopicSource2() throws InterruptedException {
+//        AtomicInteger eventCount = new AtomicInteger(0);
+//        receivedEventNameList = new ArrayList<>(2);
+//
+//        // starting the ActiveMQ broker
+//        ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(PROVIDER_URL);
+//
+//        // deploying the execution plan
+//        SiddhiManager siddhiManager = new SiddhiManager();
+//        String inStreamDefinition = "" +
+//                "@source(type='jms', @map(type='xml'), "
+//                + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
+//                + "provider.url='vm://localhost',"
+//                + "destination='DAS_JMS_TEST', "
+//                + "connection.factory.type='topic',"
+//                + "connection.factory.jndi.name='TopicConnectionFactory',"
+//                + "transport.jms.SubscriptionDurable='true', "
+//                + "transport.jms.DurableSubscriberClientID='wso2dasclient1'"
+//                + ")" +
+//                "define stream inputStream (name string, age int, country string);";
+//        String query = ("@info(name = 'query1') " +
+//                "from inputStream " +
+//                "select *  " +
+//                "insert into outputStream;");
+//        SiddhiAppRuntime executionPlanRuntime = siddhiManager.createSiddhiAppRuntime(inStreamDefinition +
+//                                                                                                     query);
+//
+//        executionPlanRuntime.addCallback("query1", new QueryCallback() {
+//            @Override
+//            public void receive(long timeStamp, Event[] inEvents, Event[] removeEvents) {
+//                EventPrinter.print(timeStamp, inEvents, removeEvents);
+//                for (Event event : inEvents) {
+//                    eventCount.incrementAndGet();
+//                    receivedEventNameList.add(event.getData(0).toString());
+//                }
+//            }
+//        });
+//        executionPlanRuntime.start();
+//        List<String> messageList = new ArrayList<>(2);
+//        messageList.add("<events>\n"
+//                        + "    <event>\n"
+//                        + "        <name>John</name>\n"
+//                        + "        <age>22</age>\n"
+//                        + "        <country>US</country>\n"
+//                        + "    </event>\n"
+//                        + "    <event>\n"
+//                        + "        <name>Mike</name>\n"
+//                        + "        <age>24</age>\n"
+//                        + "        <country>US</country>\n"
+//                        + "    </event>\n"
+//                        + "</events>");
+//        // publishing events
+//        publishEvents("DAS_JMS_TEST", null, "activemq", "text", messageList);
+//
+//        List<String> expected = new ArrayList<>(2);
+//        expected.add("John");
+//        expected.add("Mike");
+//        SiddhiTestHelper.waitForEvents(waitTime, 2, eventCount, timeout);
+//        AssertJUnit.assertEquals("JMS Source expected input not received", expected, receivedEventNameList);
+//        siddhiManager.shutdown();
+//    }
 
     //Commenting out till json is released
 //    @Test
@@ -210,6 +208,46 @@ public class JMSSourceTestCase {
 //        siddhiManager.shutdown();
 //    }
 
+    @Test(expectedExceptions = SiddhiAppValidationException.class)
+    public void testJMSTopicSource4() throws InterruptedException {
+        AtomicInteger eventCount = new AtomicInteger(0);
+        receivedEventNameList = new ArrayList<>(2);
+
+        // starting the ActiveMQ broker
+        ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(PROVIDER_URL);
+
+        // deploying the execution plan
+        SiddhiManager siddhiManager = new SiddhiManager();
+        String inStreamDefinition = "" +
+                "@source(type='jms', @map(type='text'), "
+                + "provider.url='vm://localhost',"
+                + "destination='DAS_JMS_TEST', "
+                + "connection.factory.type='topic',"
+                + "connection.factory.jndi.name='TopicConnectionFactory',"
+                + "transport.jms.SubscriptionDurable='true', "
+                + "transport.jms.DurableSubscriberClientID='wso2dasclient1'"
+                + ")" +
+                "define stream inputStream (name string, age int, country string);";
+        String query = ("@info(name = 'query1') " +
+                "from inputStream " +
+                "select *  " +
+                "insert into outputStream;");
+        SiddhiAppRuntime executionPlanRuntime = siddhiManager.createSiddhiAppRuntime(inStreamDefinition +
+                                                                                             query);
+
+        executionPlanRuntime.addCallback("query1", new QueryCallback() {
+            @Override
+            public void receive(long timeStamp, Event[] inEvents, Event[] removeEvents) {
+                EventPrinter.print(timeStamp, inEvents, removeEvents);
+                for (Event event : inEvents) {
+                    eventCount.incrementAndGet();
+                    receivedEventNameList.add(event.getData(0).toString());
+                }
+            }
+        });
+        executionPlanRuntime.start();
+        siddhiManager.shutdown();
+    }
 
     private void publishEvents(String topicName, String queueName, String broker, String format, String filePath)
             throws InterruptedException {

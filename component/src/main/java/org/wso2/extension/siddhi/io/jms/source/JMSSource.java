@@ -19,6 +19,7 @@
 package org.wso2.extension.siddhi.io.jms.source;
 
 import org.apache.log4j.Logger;
+import org.wso2.carbon.messaging.ServerConnector;
 import org.wso2.carbon.messaging.exceptions.ServerConnectorException;
 import org.wso2.carbon.transport.jms.exception.JMSConnectorException;
 import org.wso2.carbon.transport.jms.receiver.JMSServerConnector;
@@ -56,6 +57,7 @@ public class JMSSource extends Source {
     private static final String THREAD_COUNT = "worker.count";
     private static final String DEFAULT_THREAD_COUNT = "1";
     private int concurrentConsumers;
+    private Map<String, String> properties;
 
     @Override
     public void init(SourceEventListener sourceEventListener, OptionHolder optionHolder,
@@ -65,29 +67,32 @@ public class JMSSource extends Source {
         concurrentConsumers = Integer.parseInt(optionHolder.validateAndGetStaticValue(THREAD_COUNT,
                                                                                       DEFAULT_THREAD_COUNT));
         this.executionPlanContext = executionPlanContext;
+        properties = initJMSProperties();
+        jmsServerConnector = new JMSServerConnector(properties);
+        jmsMessageProcessor = new JMSMessageProcessor(sourceEventListener, executionPlanContext);
+        jmsServerConnector.setMessageProcessor(jmsMessageProcessor);
     }
 
     @Override
     public void connect() throws ConnectionUnavailableException {
-
-        Map<String, String> properties = initJMSProperties();
-        jmsServerConnector = new JMSServerConnector(properties);
-        jmsMessageProcessor = new JMSMessageProcessor(sourceEventListener, executionPlanContext);
-        jmsServerConnector.setMessageProcessor(jmsMessageProcessor);
         try {
             jmsServerConnector.start();
         } catch (ServerConnectorException e) {
-            log.error("Exception in starting the JMS receiver for stream: "
-                    + sourceEventListener.getStreamDefinition().getId(), e);
-            //todo: retry??
+            //calling super class logs the exception and retry
+            throw new ConnectionUnavailableException("Exception in starting the JMS receiver for stream: "
+                                                             + sourceEventListener.getStreamDefinition().getId(), e);
         }
     }
 
     @Override
     public void disconnect() {
         try {
-            jmsServerConnector.stop();
-            jmsMessageProcessor.disconnect();
+            if (jmsServerConnector != null && jmsServerConnector.getState() != ServerConnector.State.UNINITIALIZED) {
+                jmsServerConnector.stop();
+            }
+            if (jmsMessageProcessor != null) {
+                jmsMessageProcessor.disconnect();
+            }
         } catch (JMSConnectorException e) {
             log.error("Error disconnecting the JMS receiver", e);
         }
