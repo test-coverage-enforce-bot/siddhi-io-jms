@@ -53,11 +53,9 @@ public class JMSSource extends Source {
     private OptionHolder optionHolder;
     private JMSServerConnector jmsServerConnector;
     private JMSMessageProcessor jmsMessageProcessor;
-    private SiddhiAppContext executionPlanContext;
     private static final String THREAD_COUNT = "worker.count";
     private static final String DEFAULT_THREAD_COUNT = "1";
     private int concurrentConsumers;
-    private Map<String, String> properties;
 
     @Override
     public void init(SourceEventListener sourceEventListener, OptionHolder optionHolder,
@@ -66,8 +64,7 @@ public class JMSSource extends Source {
         this.optionHolder = optionHolder;
         concurrentConsumers = Integer.parseInt(optionHolder.validateAndGetStaticValue(THREAD_COUNT,
                                                                                       DEFAULT_THREAD_COUNT));
-        this.executionPlanContext = executionPlanContext;
-        properties = initJMSProperties();
+        Map<String, String> properties = initJMSProperties();
         jmsServerConnector = new JMSServerConnector(properties);
         jmsMessageProcessor = new JMSMessageProcessor(sourceEventListener, executionPlanContext);
         jmsServerConnector.setMessageProcessor(jmsMessageProcessor);

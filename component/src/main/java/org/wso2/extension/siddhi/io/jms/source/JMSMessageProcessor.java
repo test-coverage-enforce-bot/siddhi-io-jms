@@ -32,7 +32,6 @@ import org.wso2.siddhi.core.stream.input.source.SourceEventListener;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -41,7 +40,6 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class JMSMessageProcessor implements CarbonMessageProcessor {
     private SourceEventListener sourceEventListener;
-    private LinkedBlockingQueue<Runnable> queue;
     private boolean paused;
     private ReentrantLock lock;
     private Condition condition;
@@ -49,7 +47,6 @@ public class JMSMessageProcessor implements CarbonMessageProcessor {
     public JMSMessageProcessor(SourceEventListener sourceEventListener, SiddhiAppContext
             executionPlanContext) {
         this.sourceEventListener = sourceEventListener;
-        this.queue = new LinkedBlockingQueue<>();
         lock = new ReentrantLock();
         condition = lock.newCondition();
     }
@@ -118,14 +115,6 @@ public class JMSMessageProcessor implements CarbonMessageProcessor {
         } finally {
             lock.unlock();
         }
-    }
-
-    public void clear() {
-        queue.clear();
-    }
-
-    public boolean isEmpty() {
-        return queue.isEmpty();
     }
 
     void disconnect() {
