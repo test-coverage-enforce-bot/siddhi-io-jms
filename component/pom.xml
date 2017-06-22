@@ -63,11 +63,6 @@
         </dependency>
 
         <!-- Test scope -->
-        <!--<dependency>-->
-            <!--<groupId>junit</groupId>-->
-            <!--<artifactId>junit</artifactId>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.apache.activemq</groupId>
             <artifactId>activemq-core</artifactId>
@@ -93,12 +88,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.wso2.siddhi</groupId>
-            <artifactId>siddhi-extension-text-input-mapper</artifactId>
-            <version>${text.mapper.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.apache.xbean</groupId>
             <artifactId>xbean-spring</artifactId>
             <version>4.1</version>
@@ -108,12 +97,6 @@
             <groupId>org.wso2.extension.siddhi.map.xml</groupId>
             <artifactId>siddhi-map-xml</artifactId>
             <version>${xml.mapper.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.siddhi</groupId>
-            <artifactId>siddhi-extension-text-output-mapper</artifactId>
-            <version>${text.mapper.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -128,9 +111,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.wso2.siddhi</groupId>
-            <artifactId>siddhi-extension-json-input-mapper</artifactId>
-            <version>4.0.0-M4</version>
+            <groupId>org.wso2.extension.siddhi.map.json</groupId>
+            <artifactId>siddhi-map-json</artifactId>
+            <version>4.0.0</version>
             <scope>test</scope>
         </dependency>
 

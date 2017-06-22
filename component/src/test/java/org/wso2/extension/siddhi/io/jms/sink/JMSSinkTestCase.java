@@ -35,7 +35,7 @@ public class JMSSinkTestCase {
         // starting the ActiveMQ consumer
         Thread listenerThread = new Thread(new JMSClient("activemq", "", "DAS_JMS_OUTPUT_TEST"));
         listenerThread.start();
-        Thread.sleep(5000);
+        Thread.sleep(3000);
     }
 
     @Test
@@ -43,7 +43,7 @@ public class JMSSinkTestCase {
         // deploying the execution plan
         SiddhiManager siddhiManager = new SiddhiManager();
         String inStreamDefinition = "" +
-                "@sink(type='jms', @map(type='text'), "
+                "@sink(type='jms', @map(type='xml'), "
                 + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
                 + "provider.url='vm://localhost',"
                 + "destination='DAS_JMS_OUTPUT_TEST', "
@@ -57,7 +57,7 @@ public class JMSSinkTestCase {
         executionPlanRuntime.start();
         inputStream.send(new Object[]{"JAMES", 23, "USA"});
         inputStream.send(new Object[]{"MIKE", 23, "Germany"});
-        Thread.sleep(10000);
+        Thread.sleep(3000);
         executionPlanRuntime.shutdown();
         //todo: add a log assertion here
     }
