@@ -152,7 +152,7 @@
 
     <properties>
         <text.mapper.version>4.0.0-M7</text.mapper.version>
-        <xml.mapper.version>4.0.0-M5-SNAPSHOT</xml.mapper.version>
+        <xml.mapper.version>4.0.0-M5</xml.mapper.version>
         <mavan.findbugsplugin.exclude.file>../findbugs-exclude.xml</mavan.findbugsplugin.exclude.file>
     </properties>
 </project>
