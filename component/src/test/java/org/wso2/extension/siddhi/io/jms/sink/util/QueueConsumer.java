@@ -35,14 +35,17 @@ import javax.jms.TextMessage;
 
 public class QueueConsumer implements Runnable {
 
+    private final ResultContainer resultContainer;
     private QueueConnectionFactory queueConnectionFactory;
     private String queueName;
     private boolean active = true;
     private static Log log = LogFactory.getLog(QueueConsumer.class);
 
-    public QueueConsumer(QueueConnectionFactory queueConnectionFactory, String queueName) {
+    public QueueConsumer(QueueConnectionFactory queueConnectionFactory, String queueName,
+                         ResultContainer resultContainer) {
         this.queueConnectionFactory = queueConnectionFactory;
         this.queueName = queueName;
+        this.resultContainer = resultContainer;
     }
 
     public void run() {
@@ -64,6 +67,7 @@ public class QueueConsumer implements Runnable {
             while (active) {
                 Message message = consumer.receive(1000);
                 if (message != null) {
+                    resultContainer.eventReceived(message);
                     if (message instanceof MapMessage) {
                         MapMessage mapMessage = (MapMessage) message;
                         Map<String, Object> map = new HashMap<String, Object>();

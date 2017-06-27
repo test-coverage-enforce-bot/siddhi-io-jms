@@ -37,14 +37,17 @@ import javax.jms.TopicConnectionFactory;
  * Consumes JMS topic messages.
  */
 public class TopicConsumer implements Runnable {
+    private final ResultContainer resultContainer;
     private TopicConnectionFactory topicConnectionFactory;
     private String topicName;
     private boolean active = true;
     private static Log log = LogFactory.getLog(TopicConsumer.class);
 
-    public TopicConsumer(TopicConnectionFactory topicConnectionFactory, String topicName) {
+    public TopicConsumer(TopicConnectionFactory topicConnectionFactory, String topicName,
+                         ResultContainer resultContainer) {
         this.topicConnectionFactory = topicConnectionFactory;
         this.topicName = topicName;
+        this.resultContainer = resultContainer;
     }
 
     public void run() {

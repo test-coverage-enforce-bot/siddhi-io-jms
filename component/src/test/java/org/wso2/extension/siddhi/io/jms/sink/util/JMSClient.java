@@ -33,13 +33,18 @@ import javax.naming.NamingException;
  */
 public class JMSClient implements Runnable {
     private static Log log = LogFactory.getLog(JMSClient.class);
+    private final ResultContainer resultContainer;
 
     private String broker, topic, queue;
+    private TopicConsumer topicConsumer;
+    private QueueConsumer queueConsumer;
 
-    public JMSClient(String broker, String topic, String queue) {
+
+    public JMSClient(String broker, String topic, String queue, ResultContainer resultContainer) {
         this.broker = broker;
         this.topic = topic;
         this.queue = queue;
+        this.resultContainer = resultContainer;
     }
 
     public void listen() throws InterruptedException {
@@ -66,24 +71,18 @@ public class JMSClient implements Runnable {
                 Context context = new InitialContext(properties);
                 TopicConnectionFactory topicConnectionFactory =
                         (TopicConnectionFactory) context.lookup("ConnectionFactory");
-                TopicConsumer topicConsumer = new TopicConsumer(topicConnectionFactory, topic);
+                topicConsumer = new TopicConsumer(topicConnectionFactory, topic, resultContainer);
                 Thread consumerThread = new Thread(topicConsumer);
                 log.info("Starting" + broker + "consumerTopic thread...");
                 consumerThread.start();
-                Thread.sleep(1 * 60000);
-                log.info("Shutting down " + broker + " consumerTopic...");
-                topicConsumer.shutdown();
             } else {
                 Context context = new InitialContext(properties);
                 QueueConnectionFactory queueConnectionFactory =
                         (QueueConnectionFactory) context.lookup("ConnectionFactory");
-                QueueConsumer queueConsumer = new QueueConsumer(queueConnectionFactory, queue);
+                queueConsumer = new QueueConsumer(queueConnectionFactory, queue, resultContainer);
                 Thread consumerThread = new Thread(queueConsumer);
                 log.info("Starting" + broker + "consumerQueue thread...");
                 consumerThread.start();
-                Thread.sleep(1 * 60000);
-                log.info("Shutting down " + broker + " consumerQueue...");
-                queueConsumer.shutdown();
             }
         } catch (IOException e) {
             log.error("Cannot read properties file from resources. " + e.getMessage(), e);
@@ -98,6 +97,14 @@ public class JMSClient implements Runnable {
             listen();
         } catch (InterruptedException e) {
             log.error("Error starting the JMS consumer: ", e);
+        }
+    }
+
+    public void shutdown() {
+        if (topicConsumer != null) {
+            topicConsumer.shutdown();
+        } else {
+            queueConsumer.shutdown();
         }
     }
 }
