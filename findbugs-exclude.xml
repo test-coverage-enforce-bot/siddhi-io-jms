@@ -26,4 +26,8 @@
         <class name="org.wso2.extension.siddhi.io.jms.source.JMSMessageProcessor"/>
         <Bug pattern="WA_AWAIT_NOT_IN_LOOP"/>
     </Match>
+    <Match>
+        <class name="org.wso2.extension.siddhi.io.jms.source.JMSMessageProcessor"/>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
 </FindBugsFilter>

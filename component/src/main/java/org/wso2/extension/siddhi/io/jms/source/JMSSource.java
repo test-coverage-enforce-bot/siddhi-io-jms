@@ -59,19 +59,22 @@ public class JMSSource extends Source {
 
     @Override
     public void init(SourceEventListener sourceEventListener, OptionHolder optionHolder,
-                     ConfigReader configReader, SiddhiAppContext executionPlanContext) {
+                     String[] requestedTransportPropertyNames, ConfigReader configReader,
+                     SiddhiAppContext siddhiAppContext) {
         this.sourceEventListener = sourceEventListener;
         this.optionHolder = optionHolder;
         concurrentConsumers = Integer.parseInt(optionHolder.validateAndGetStaticValue(THREAD_COUNT,
                                                                                       DEFAULT_THREAD_COUNT));
         Map<String, String> properties = initJMSProperties();
         jmsServerConnector = new JMSServerConnector(properties);
-        jmsMessageProcessor = new JMSMessageProcessor(sourceEventListener, executionPlanContext);
+        jmsMessageProcessor = new JMSMessageProcessor(sourceEventListener, siddhiAppContext,
+                                                      requestedTransportPropertyNames);
         jmsServerConnector.setMessageProcessor(jmsMessageProcessor);
     }
 
     @Override
-    public void connect() throws ConnectionUnavailableException {
+    public void connect(ConnectionCallback connectionCallback) throws ConnectionUnavailableException {
+        //ConnectionCallback is not used as re-connection is handled by carbon transport.
         try {
             jmsServerConnector.start();
         } catch (ServerConnectorException e) {
@@ -79,6 +82,10 @@ public class JMSSource extends Source {
             throw new ConnectionUnavailableException("Exception in starting the JMS receiver for stream: "
                                                              + sourceEventListener.getStreamDefinition().getId(), e);
         }
+    }
+
+    @Override public Class[] getOutputEventClasses() {
+        return new Class[]{String.class, Map.class};
     }
 
     @Override

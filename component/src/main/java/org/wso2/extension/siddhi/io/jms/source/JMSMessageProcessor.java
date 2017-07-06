@@ -43,12 +43,14 @@ public class JMSMessageProcessor implements CarbonMessageProcessor {
     private boolean paused;
     private ReentrantLock lock;
     private Condition condition;
+    private String[] requestedTransportPropertyNames;
 
     public JMSMessageProcessor(SourceEventListener sourceEventListener, SiddhiAppContext
-            executionPlanContext) {
+            executionPlanContext, String[] requestedTransportPropertyNames) {
         this.sourceEventListener = sourceEventListener;
         lock = new ReentrantLock();
         condition = lock.newCondition();
+        this.requestedTransportPropertyNames = requestedTransportPropertyNames;
     }
 
     @Override
@@ -65,9 +67,11 @@ public class JMSMessageProcessor implements CarbonMessageProcessor {
         }
         try {
             if (carbonMessage.getClass() == TextCarbonMessage.class) {
+                String[] transportProperties = populateTransportHeaders(carbonMessage);
                 String event = ((TextCarbonMessage) carbonMessage).getText();
-                sourceEventListener.onEvent(event);
+                sourceEventListener.onEvent(event, transportProperties);
             } else if (carbonMessage.getClass() == MapCarbonMessage.class) {
+                String[] transportProperties = populateTransportHeaders(carbonMessage);
                 Map<String, String> event = new HashMap<>();
                 MapCarbonMessage mapCarbonMessage = (MapCarbonMessage) carbonMessage;
                 Enumeration<String> mapNames = mapCarbonMessage.getMapNames();
@@ -75,7 +79,7 @@ public class JMSMessageProcessor implements CarbonMessageProcessor {
                     String key = mapNames.nextElement();
                     event.put(key, mapCarbonMessage.getValue(key));
                 }
-                sourceEventListener.onEvent(event);
+                sourceEventListener.onEvent(event, transportProperties);
             } else {
                 throw new JMSInputAdaptorRuntimeException("The message type of the JMS message" +
                                                                   carbonMessage.getClass() + " is not supported!");
@@ -88,6 +92,20 @@ public class JMSMessageProcessor implements CarbonMessageProcessor {
             throw new JMSInputAdaptorRuntimeException("Failed to process JMS message.", e);
         }
         return true;
+    }
+
+    private String[] populateTransportHeaders(CarbonMessage carbonMessage) {
+        if (requestedTransportPropertyNames.length > 0) {      //cannot be null according to siddhi impl
+            String[] properties = new String[requestedTransportPropertyNames.length];
+            int i = 0;
+            for (String property : requestedTransportPropertyNames) {
+                properties[i] = carbonMessage.getHeader(property);      //can be null
+                i++;
+            }
+            return properties;
+        } else {
+            return new String[0];
+        }
     }
 
     @Override

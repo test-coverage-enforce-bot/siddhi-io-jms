@@ -94,6 +94,10 @@ public class JMSSink extends Sink {
         }
     }
 
+    @Override public Class[] getSupportedInputEventClasses() {
+        return new Class[0];
+    }
+
     @Override
     public String[] getSupportedDynamicOptions() {
         return new String[]{JMSConstants.DESTINATION_PARAM_NAME};
