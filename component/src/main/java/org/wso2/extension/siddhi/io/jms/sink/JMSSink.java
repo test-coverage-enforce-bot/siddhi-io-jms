@@ -95,7 +95,7 @@ public class JMSSink extends Sink {
     }
 
     @Override public Class[] getSupportedInputEventClasses() {
-        return new Class[0];
+        return new Class[]{String.class, Map.class, Byte[].class};
     }
 
     @Override
