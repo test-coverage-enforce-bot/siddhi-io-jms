@@ -1,0 +1,866 @@
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+      
+      
+      
+        <link rel="shortcut icon" href="../../assets/images/favicon.png">
+      
+      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.7.4">
+    
+    
+      
+        <title>1.0.5-SNAPSHOT - Siddhi-IO-JMS</title>
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr-1df76c4e58.js"></script>
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application-769c285a91.css">
+      
+        <link rel="stylesheet" href="../../assets/stylesheets/application-02c2a4388f.palette.css">
+      
+    
+    
+      
+        
+        
+        
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    
+  </head>
+  
+  
+  
+  
+    <body data-md-color-primary="teal" data-md-color-accent="teal">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="drawer">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search">
+    <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <a href="../.." title="Siddhi-IO-JMS" class="md-logo md-header-nav__button">
+            <img src="../../images/siddhi-logo-w.svg" width="24" height="24">
+          </a>
+        
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <span class="md-flex__ellipsis md-header-nav__title">
+          
+            
+              
+                <span class="md-header-nav__parent">
+                  Api
+                </span>
+              
+            
+            1.0.5-SNAPSHOT
+          
+        </span>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+          
+<div class="md-search" data-md-component="search">
+  <label class="md-search__overlay" for="search"></label>
+  <div class="md-search__inner">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" required placeholder="Search" accesskey="s" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
+      <label class="md-icon md-search__icon" for="search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">close</button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result" data-md-lang-search="">
+          <div class="md-search-result__meta" data-md-lang-result-none="No matching documents" data-md-lang-result-one="1 matching document" data-md-lang-result-other="# matching documents">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="drawer">
+    
+      <i class="md-logo md-nav__button">
+        <img src="../../images/siddhi-logo-w.svg">
+      </i>
+    
+    Siddhi-IO-JMS
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Welcome to WSO2 Siddhi IO JMS" class="md-nav__link">
+      Welcome to WSO2 Siddhi IO JMS
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../license/" title="License" class="md-nav__link">
+      License
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      Api
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Api
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../1.0.4-SNAPSHOT/" title="1.0.4-SNAPSHOT" class="md-nav__link">
+      1.0.4-SNAPSHOT
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        1.0.5-SNAPSHOT
+      </label>
+    
+    <a href="./" title="1.0.5-SNAPSHOT" class="md-nav__link md-nav__link--active">
+      1.0.5-SNAPSHOT
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sink" title="Sink" class="md-nav__link">
+    Sink
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jms-sink" title="jms (Sink)" class="md-nav__link">
+    jms (Sink)
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#syntax" title="Syntax" class="md-nav__link">
+    Syntax
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#query-parameters" title="Query Parameters" class="md-nav__link">
+    Query Parameters
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples" title="Examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-1" title="Example 1" class="md-nav__link">
+    Example 1
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-2" title="Example 2" class="md-nav__link">
+    Example 2
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#source" title="Source" class="md-nav__link">
+    Source
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jms-source" title="jms (Source)" class="md-nav__link">
+    jms (Source)
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#syntax_1" title="Syntax" class="md-nav__link">
+    Syntax
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#query-parameters_1" title="Query Parameters" class="md-nav__link">
+    Query Parameters
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_1" title="Examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-1_1" title="Example 1" class="md-nav__link">
+    Example 1
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-2_1" title="Example 2" class="md-nav__link">
+    Example 2
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sink" title="Sink" class="md-nav__link">
+    Sink
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jms-sink" title="jms (Sink)" class="md-nav__link">
+    jms (Sink)
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#syntax" title="Syntax" class="md-nav__link">
+    Syntax
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#query-parameters" title="Query Parameters" class="md-nav__link">
+    Query Parameters
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples" title="Examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-1" title="Example 1" class="md-nav__link">
+    Example 1
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-2" title="Example 2" class="md-nav__link">
+    Example 2
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#source" title="Source" class="md-nav__link">
+    Source
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jms-source" title="jms (Source)" class="md-nav__link">
+    jms (Source)
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#syntax_1" title="Syntax" class="md-nav__link">
+    Syntax
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#query-parameters_1" title="Query Parameters" class="md-nav__link">
+    Query Parameters
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples_1" title="Examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-1_1" title="Example 1" class="md-nav__link">
+    Example 1
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-2_1" title="Example 2" class="md-nav__link">
+    Example 2
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  <h1>1.0.5-SNAPSHOT</h1>
+                
+                <h2 id="sink">Sink</h2>
+<h3 id="jms-sink">jms <em>(Sink)</em></h3>
+<p style="word-wrap: break-word">JMS Output Transport</p>
+
+<h4 id="syntax">Syntax</h4>
+<pre><code>@sink(type=&quot;jms&quot;, destination=&quot;&lt;STRING&gt;&quot;, connection.factory.jndi.name=&quot;&lt;STRING&gt;&quot;, factory.initial=&quot;&lt;STRING&gt;&quot;, provider.url=&quot;&lt;STRING&gt;&quot;, connection.factory.type=&quot;&lt;STRING&gt;&quot;, connection.username=&quot;&lt;STRING&gt;&quot;, connection.password=&quot;&lt;STRING&gt;&quot;, connection.factory.nature=&quot;&lt;STRING&gt;&quot;, @map(...)))
+</code></pre>
+
+<h5 id="query-parameters">Query Parameters</h5>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Default Value</th>
+        <th>Possible Types</th>
+        <th>Optional</th>
+        <th>Dynamic</th>
+    </tr>
+    <tr>
+        <td valign="top">destination</td>
+        <td valign="top"><p style="word-wrap: break-word">Queue/Topic name which JMS Source should subscribe to</p></td>
+        <td valign="top"></td>
+        <td valign="top">STRING</td>
+        <td valign="top">No</td>
+        <td valign="top">Yes</td>
+    </tr>
+    <tr>
+        <td valign="top">connection.factory.jndi.name</td>
+        <td valign="top"><p style="word-wrap: break-word">JMS Connection Factory JNDI name. This value will be used for the JNDI lookup to find the JMS Connection Factory.</p></td>
+        <td valign="top">QueueConnectionFactory</td>
+        <td valign="top">STRING</td>
+        <td valign="top">Yes</td>
+        <td valign="top">No</td>
+    </tr>
+    <tr>
+        <td valign="top">factory.initial</td>
+        <td valign="top"><p style="word-wrap: break-word">Naming factory initial value</p></td>
+        <td valign="top"></td>
+        <td valign="top">STRING</td>
+        <td valign="top">No</td>
+        <td valign="top">No</td>
+    </tr>
+    <tr>
+        <td valign="top">provider.url</td>
+        <td valign="top"><p style="word-wrap: break-word">Java naming provider URL. Property for specifying configuration information for the service provider to use. The value of the property should contain a URL string (e.g. "ldap://somehost:389")</p></td>
+        <td valign="top"></td>
+        <td valign="top">STRING</td>
+        <td valign="top">No</td>
+        <td valign="top">No</td>
+    </tr>
+    <tr>
+        <td valign="top">connection.factory.type</td>
+        <td valign="top"><p style="word-wrap: break-word">Type of the connection connection factory. This can be either queue or topic.</p></td>
+        <td valign="top">queue</td>
+        <td valign="top">STRING</td>
+        <td valign="top">Yes</td>
+        <td valign="top">No</td>
+    </tr>
+    <tr>
+        <td valign="top">connection.username</td>
+        <td valign="top"><p style="word-wrap: break-word">username for the broker.</p></td>
+        <td valign="top">None</td>
+        <td valign="top">STRING</td>
+        <td valign="top">Yes</td>
+        <td valign="top">No</td>
+    </tr>
+    <tr>
+        <td valign="top">connection.password</td>
+        <td valign="top"><p style="word-wrap: break-word">Password for the broker</p></td>
+        <td valign="top">None</td>
+        <td valign="top">STRING</td>
+        <td valign="top">Yes</td>
+        <td valign="top">No</td>
+    </tr>
+    <tr>
+        <td valign="top">connection.factory.nature</td>
+        <td valign="top"><p style="word-wrap: break-word">Connection factory nature for the broker(cached/pooled).</p></td>
+        <td valign="top">default</td>
+        <td valign="top">STRING</td>
+        <td valign="top">Yes</td>
+        <td valign="top">No</td>
+    </tr>
+</table>
+
+<h4 id="examples">Examples</h4>
+<h5 id="example-1">Example 1</h5>
+<pre><code>@sink(type='jms', @map(type='xml'), factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', provider.url='vm://localhost',destination='DAS_JMS_OUTPUT_TEST', connection.factory.type='topic',connection.factory.jndi.name='TopicConnectionFactory')define stream inputStream (name string, age int, country string);
+</code></pre>
+
+<p style="word-wrap: break-word">Following example illustrates how to publish to an ActiveMQ topic.</p>
+
+<h5 id="example-2">Example 2</h5>
+<pre><code>@sink(type='jms', @map(type='xml'), factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', provider.url='vm://localhost',destination='DAS_JMS_OUTPUT_TEST')define stream inputStream (name string, age int, country string);
+</code></pre>
+
+<p style="word-wrap: break-word">Following example illustrates how to publish to an ActiveMQ queue. Note that we are not providing properties like connection factory type</p>
+
+<h2 id="source">Source</h2>
+<h3 id="jms-source">jms <em>(Source)</em></h3>
+<p style="word-wrap: break-word">JMS Source allows users to subscribe to a JMS broker and receive JMS messages. It has the ability to receive Map messages and Text messages. Following described parameters can be used to configure the event source</p>
+
+<h4 id="syntax_1">Syntax</h4>
+<pre><code>@source(type=&quot;jms&quot;, destination=&quot;&lt;STRING&gt;&quot;, connection.factory.jndi.name=&quot;&lt;STRING&gt;&quot;, factory.initial=&quot;&lt;STRING&gt;&quot;, provider.url=&quot;&lt;STRING&gt;&quot;, connection.factory.type=&quot;&lt;STRING&gt;&quot;, worker.count=&quot;&lt;INT&gt;&quot;, connection.username=&quot;&lt;STRING&gt;&quot;, connection.password=&quot;&lt;STRING&gt;&quot;, retry.interval=&quot;&lt;INT&gt;&quot;, retry.count=&quot;&lt;INT&gt;&quot;, use.receiver=&quot;&lt;BOOL&gt;&quot;, subscription.durable=&quot;&lt;BOOL&gt;&quot;, connection.factory.nature=&quot;&lt;STRING&gt;&quot;, @map(...)))
+</code></pre>
+
+<h5 id="query-parameters_1">Query Parameters</h5>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Default Value</th>
+        <th>Possible Types</th>
+        <th>Optional</th>
+        <th>Dynamic</th>
+    </tr>
+    <tr>
+        <td valign="top">destination</td>
+        <td valign="top"><p style="word-wrap: break-word">Queue/Topic name which JMS Source should subscribe to</p></td>
+        <td valign="top"></td>
+        <td valign="top">STRING</td>
+        <td valign="top">No</td>
+        <td valign="top">No</td>
+    </tr>
+    <tr>
+        <td valign="top">connection.factory.jndi.name</td>
+        <td valign="top"><p style="word-wrap: break-word">JMS Connection Factory JNDI name. This value will be used for the JNDI lookup to find the JMS Connection Factory.</p></td>
+        <td valign="top">QueueConnectionFactory</td>
+        <td valign="top">STRING</td>
+        <td valign="top">Yes</td>
+        <td valign="top">No</td>
+    </tr>
+    <tr>
+        <td valign="top">factory.initial</td>
+        <td valign="top"><p style="word-wrap: break-word">Naming factory initial value</p></td>
+        <td valign="top"></td>
+        <td valign="top">STRING</td>
+        <td valign="top">No</td>
+        <td valign="top">No</td>
+    </tr>
+    <tr>
+        <td valign="top">provider.url</td>
+        <td valign="top"><p style="word-wrap: break-word">Java naming provider URL. Property for specifying configuration information for the service provider to use. The value of the property should contain a URL string (e.g. "ldap://somehost:389")</p></td>
+        <td valign="top"></td>
+        <td valign="top">STRING</td>
+        <td valign="top">No</td>
+        <td valign="top">No</td>
+    </tr>
+    <tr>
+        <td valign="top">connection.factory.type</td>
+        <td valign="top"><p style="word-wrap: break-word">Type of the connection connection factory. This can be either queue or topic.</p></td>
+        <td valign="top">queue</td>
+        <td valign="top">STRING</td>
+        <td valign="top">Yes</td>
+        <td valign="top">No</td>
+    </tr>
+    <tr>
+        <td valign="top">worker.count</td>
+        <td valign="top"><p style="word-wrap: break-word">Number of worker threads listening on the given queue/topic.</p></td>
+        <td valign="top">1</td>
+        <td valign="top">INT</td>
+        <td valign="top">Yes</td>
+        <td valign="top">No</td>
+    </tr>
+    <tr>
+        <td valign="top">connection.username</td>
+        <td valign="top"><p style="word-wrap: break-word">username for the broker.</p></td>
+        <td valign="top">None</td>
+        <td valign="top">STRING</td>
+        <td valign="top">Yes</td>
+        <td valign="top">No</td>
+    </tr>
+    <tr>
+        <td valign="top">connection.password</td>
+        <td valign="top"><p style="word-wrap: break-word">Password for the broker</p></td>
+        <td valign="top">None</td>
+        <td valign="top">STRING</td>
+        <td valign="top">Yes</td>
+        <td valign="top">No</td>
+    </tr>
+    <tr>
+        <td valign="top">retry.interval</td>
+        <td valign="top"><p style="word-wrap: break-word">Interval between each retry attempt in case of connection failure in milliseconds.</p></td>
+        <td valign="top">10000</td>
+        <td valign="top">INT</td>
+        <td valign="top">Yes</td>
+        <td valign="top">No</td>
+    </tr>
+    <tr>
+        <td valign="top">retry.count</td>
+        <td valign="top"><p style="word-wrap: break-word">Number of maximum reties that will be attempted in case of connection failure with broker.</p></td>
+        <td valign="top">5</td>
+        <td valign="top">INT</td>
+        <td valign="top">Yes</td>
+        <td valign="top">No</td>
+    </tr>
+    <tr>
+        <td valign="top">use.receiver</td>
+        <td valign="top"><p style="word-wrap: break-word">Implementation to be used when consuming JMS messages. By default transport will use MessageListener and tweaking this property will make make use of MessageReceiver</p></td>
+        <td valign="top">false</td>
+        <td valign="top">BOOL</td>
+        <td valign="top">Yes</td>
+        <td valign="top">No</td>
+    </tr>
+    <tr>
+        <td valign="top">subscription.durable</td>
+        <td valign="top"><p style="word-wrap: break-word">Property to enable durable subscription.</p></td>
+        <td valign="top">false</td>
+        <td valign="top">BOOL</td>
+        <td valign="top">Yes</td>
+        <td valign="top">No</td>
+    </tr>
+    <tr>
+        <td valign="top">connection.factory.nature</td>
+        <td valign="top"><p style="word-wrap: break-word">Connection factory nature for the broker.</p></td>
+        <td valign="top">default</td>
+        <td valign="top">STRING</td>
+        <td valign="top">Yes</td>
+        <td valign="top">No</td>
+    </tr>
+</table>
+
+<h4 id="examples_1">Examples</h4>
+<h5 id="example-1_1">Example 1</h5>
+<pre><code>@source(type='jms', @map(type='json'), factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', provider.url='tcp://localhost:61616',destination='DAS_JMS_TEST', connection.factory.type='topic',connection.factory.jndi.name='TopicConnectionFactory')define stream inputStream (name string, age int, country string);
+</code></pre>
+
+<p style="word-wrap: break-word">Following example illustrates how to connect to an ActiveMQ topic and receive messages.</p>
+
+<h5 id="example-2_1">Example 2</h5>
+<pre><code>@source(type='jms', @map(type='json'), factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', provider.url='tcp://localhost:61616',destination='DAS_JMS_TEST' )define stream inputStream (name string, age int, country string);
+</code></pre>
+
+<p style="word-wrap: break-word">Following example illustrates how to connect to an ActiveMQ queue and receive messages. Note that we are not providing properties like connection factory type</p>
+                
+                  
+                
+              
+              
+                
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../1.0.4-SNAPSHOT/" title="1.0.4-SNAPSHOT" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                1.0.4-SNAPSHOT
+              </span>
+            </div>
+          </a>
+        
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        and
+        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
+          Material for MkDocs</a>
+      </div>
+      
+        
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application-c35428f87f.js"></script>
+      
+      
+      <script>app.initialize({url:{base:"../.."}})</script>
+      
+    
+    
+      
+    
+  </body>
+</html>
