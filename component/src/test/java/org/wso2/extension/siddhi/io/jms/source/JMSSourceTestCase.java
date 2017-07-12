@@ -182,9 +182,7 @@ public class JMSSourceTestCase {
                 "@source(type='jms', @map(type='json'), "
                 + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
                 + "provider.url='vm://localhost',"
-                + "destination='DAS_JMS_TEST', "
-                + "connection.factory.type='queue',"
-                + "connection.factory.jndi.name='QueueConnectionFactory'"
+                + "destination='DAS_JMS_TEST' "
                 + ")" +
                 "define stream inputStream (name string, age int, country string);";
         String query = ("@info(name = 'query1') " +

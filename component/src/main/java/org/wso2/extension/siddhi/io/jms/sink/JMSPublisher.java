@@ -48,7 +48,7 @@ public class JMSPublisher implements Runnable {
                         JMSClientConnector jmsClientConnector, Object payload) {
         this.jmsProperties = new HashMap<>();
         this.jmsProperties.putAll(staticJMSProperties);
-        this.jmsProperties.put(JMSConstants.DESTINATION_PARAM_NAME, destination);
+        this.jmsProperties.put(JMSConstants.PARAM_DESTINATION_NAME, destination);
         this.jmsClientConnector = jmsClientConnector;
         this.message = handleCarbonMessage(payload);
     }

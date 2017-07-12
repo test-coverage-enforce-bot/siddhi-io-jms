@@ -20,10 +20,11 @@ package org.wso2.extension.siddhi.io.jms.sink;
 
 import org.apache.log4j.Logger;
 import org.wso2.carbon.transport.jms.sender.JMSClientConnector;
-import org.wso2.carbon.transport.jms.utils.JMSConstants;
 import org.wso2.extension.siddhi.io.jms.util.JMSOptionsMapper;
 import org.wso2.siddhi.annotation.Example;
 import org.wso2.siddhi.annotation.Extension;
+import org.wso2.siddhi.annotation.Parameter;
+import org.wso2.siddhi.annotation.util.DataType;
 import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.exception.ConnectionUnavailableException;
 import org.wso2.siddhi.core.stream.output.sink.Sink;
@@ -39,6 +40,8 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.RejectedExecutionException;
 
+import static org.wso2.extension.siddhi.io.jms.util.JMSOptionsMapper.DESTINATION;
+
 /**
  * JMS output transport class.
  * Dynamic options: destination
@@ -47,7 +50,66 @@ import java.util.concurrent.RejectedExecutionException;
         name = "jms",
         namespace = "sink",
         description = "JMS Output Transport",
-        examples = @Example(description = "TBD", syntax = "TBD")
+        parameters = {
+                @Parameter(name = JMSOptionsMapper.DESTINATION,
+                           description = "Queue/Topic name which JMS Source should subscribe to",
+                           type = DataType.STRING,
+                           dynamic = true
+                ),
+                @Parameter(name = JMSOptionsMapper.CONNECTION_FACTORY_JNDI_NAME,
+                           description = "JMS Connection Factory JNDI name. This value will be used for the JNDI "
+                                   + "lookup to find the JMS Connection Factory.",
+                           type = DataType.STRING,
+                           optional = true,
+                           defaultValue = "QueueConnectionFactory"),
+                @Parameter(name = JMSOptionsMapper.FACTORY_INITIAL,
+                           description = "Naming factory initial value",
+                           type = DataType.STRING),
+                @Parameter(name = JMSOptionsMapper.PROVIDER_URL,
+                           description = "Java naming provider URL. Property for specifying configuration "
+                                   + "information for the service provider to use. The value of the property should "
+                                   + "contain a URL string (e.g. \"ldap://somehost:389\")",
+                           type = DataType.STRING),
+                @Parameter(name = JMSOptionsMapper.CONNECTION_FACTORY_TYPE,
+                           description = "Type of the connection connection factory. This can be either queue or "
+                                   + "topic.",
+                           type = DataType.STRING,
+                           optional = true,
+                           defaultValue = "queue"),
+                @Parameter(name = JMSOptionsMapper.CONNECTION_USERNAME,
+                           description = "username for the broker.",
+                           type = DataType.STRING,
+                           optional = true,
+                           defaultValue = "None"),
+                @Parameter(name = JMSOptionsMapper.CONNECTION_PASSWORD,
+                           description = "Password for the broker",
+                           type = DataType.STRING,
+                           optional = true,
+                           defaultValue = "None"),
+                @Parameter(name = JMSOptionsMapper.CONNECTION_FACTORY_NATURE,
+                           description = "Connection factory nature for the broker(cached/pooled).",
+                           type = DataType.STRING,
+                           optional = true,
+                           defaultValue = "default")
+        },
+        examples = {
+                @Example(description = "Following example illustrates how to publish to an ActiveMQ topic.",
+                         syntax = "@sink(type='jms', @map(type='xml'), "
+                                 + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
+                                 + "provider.url='vm://localhost',"
+                                 + "destination='DAS_JMS_OUTPUT_TEST', "
+                                 + "connection.factory.type='topic',"
+                                 + "connection.factory.jndi.name='TopicConnectionFactory'"
+                                 + ")" +
+                                 "define stream inputStream (name string, age int, country string);"),
+                @Example(description = "Following example illustrates how to publish to an ActiveMQ queue. "
+                        + "Note that we are not providing properties like connection factory type",
+                         syntax = "@sink(type='jms', @map(type='xml'), "
+                                 + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
+                                 + "provider.url='vm://localhost',"
+                                 + "destination='DAS_JMS_OUTPUT_TEST')" +
+                                 "define stream inputStream (name string, age int, country string);")
+        }
 )
 public class JMSSink extends Sink {
     private static final Logger log = Logger.getLogger(JMSSink.class);
@@ -61,7 +123,7 @@ public class JMSSink extends Sink {
     protected void init(StreamDefinition outputStreamDefinition, OptionHolder optionHolder,
                         ConfigReader sinkConfigReader, SiddhiAppContext executionPlanContext) {
         this.optionHolder = optionHolder;
-        this.destination = optionHolder.getOrCreateOption(JMSConstants.DESTINATION_PARAM_NAME, null);
+        this.destination = optionHolder.getOrCreateOption(DESTINATION, null);
         this.jmsStaticProperties = initJMSProperties();
         this.executorService = executionPlanContext.getExecutorService();
     }
@@ -100,7 +162,7 @@ public class JMSSink extends Sink {
 
     @Override
     public String[] getSupportedDynamicOptions() {
-        return new String[]{JMSConstants.DESTINATION_PARAM_NAME};
+        return new String[]{DESTINATION};
     }
 
     @Override

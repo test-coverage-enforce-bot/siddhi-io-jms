@@ -23,10 +23,11 @@ import org.wso2.carbon.messaging.ServerConnector;
 import org.wso2.carbon.messaging.exceptions.ServerConnectorException;
 import org.wso2.carbon.transport.jms.exception.JMSConnectorException;
 import org.wso2.carbon.transport.jms.receiver.JMSServerConnector;
-import org.wso2.carbon.transport.jms.utils.JMSConstants;
 import org.wso2.extension.siddhi.io.jms.util.JMSOptionsMapper;
 import org.wso2.siddhi.annotation.Example;
 import org.wso2.siddhi.annotation.Extension;
+import org.wso2.siddhi.annotation.Parameter;
+import org.wso2.siddhi.annotation.util.DataType;
 import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.exception.ConnectionUnavailableException;
 import org.wso2.siddhi.core.stream.input.source.Source;
@@ -44,8 +45,99 @@ import java.util.Map;
 @Extension(
         name = "jms",
         namespace = "source",
-        description = "JMS Source",
-        examples = @Example(description = "TBD", syntax = "TBD")
+        description = "JMS Source allows users to subscribe to a JMS broker and receive JMS messages. It has the "
+                + "ability to receive Map messages and Text messages. Following described parameters can be used to "
+                + "configure the event source",
+        parameters = {
+                @Parameter(name = JMSOptionsMapper.DESTINATION,
+                           description = "Queue/Topic name which JMS Source should subscribe to",
+                           type = DataType.STRING
+                           ),
+                @Parameter(name = JMSOptionsMapper.CONNECTION_FACTORY_JNDI_NAME,
+                           description = "JMS Connection Factory JNDI name. This value will be used for the JNDI "
+                                   + "lookup to find the JMS Connection Factory.",
+                           type = DataType.STRING,
+                           optional = true,
+                           defaultValue = "QueueConnectionFactory"),
+                @Parameter(name = JMSOptionsMapper.FACTORY_INITIAL,
+                           description = "Naming factory initial value",
+                           type = DataType.STRING),
+                @Parameter(name = JMSOptionsMapper.PROVIDER_URL,
+                           description = "Java naming provider URL. Property for specifying configuration "
+                                   + "information for the service provider to use. The value of the property should "
+                                   + "contain a URL string (e.g. \"ldap://somehost:389\")",
+                           type = DataType.STRING),
+                @Parameter(name = JMSOptionsMapper.CONNECTION_FACTORY_TYPE,
+                           description = "Type of the connection connection factory. This can be either queue or "
+                                   + "topic.",
+                           type = DataType.STRING,
+                           optional = true,
+                           defaultValue = "queue"),
+                @Parameter(name = JMSOptionsMapper.WORKER_COUNT,
+                           description = "Number of worker threads listening on the given queue/topic.",
+                           type = DataType.INT,
+                           optional = true,
+                           defaultValue = "1"),
+                @Parameter(name = JMSOptionsMapper.CONNECTION_USERNAME,
+                           description = "username for the broker.",
+                           type = DataType.STRING,
+                           optional = true,
+                           defaultValue = "None"),
+                @Parameter(name = JMSOptionsMapper.CONNECTION_PASSWORD,
+                           description = "Password for the broker",
+                           type = DataType.STRING,
+                           optional = true,
+                           defaultValue = "None"),
+                @Parameter(name = JMSOptionsMapper.RETRY_INTERVAL,
+                           description = "Interval between each retry attempt in case of connection failure in "
+                                   + "milliseconds.",
+                           type = DataType.INT,
+                           optional = true,
+                           defaultValue = "10000"),
+                @Parameter(name = JMSOptionsMapper.MAX_RETRY_COUNT,
+                           description = "Number of maximum reties that will be attempted in case of connection "
+                                   + "failure with broker.",
+                           type = DataType.INT,
+                           optional = true,
+                           defaultValue = "5"),
+                @Parameter(name = JMSOptionsMapper.USE_RECEIVER,
+                           description = "Implementation to be used when consuming JMS messages. By default transport"
+                                   + " will use MessageListener and tweaking this property will make make use of "
+                                   + "MessageReceiver",
+                           type = DataType.BOOL,
+                           optional = true,
+                           defaultValue = "false"),
+                @Parameter(name = JMSOptionsMapper.PARAM_SUB_DURABLE,
+                           description = "Property to enable durable subscription.",
+                           type = DataType.BOOL,
+                           optional = true,
+                           defaultValue = "false"),
+                @Parameter(name = JMSOptionsMapper.CONNECTION_FACTORY_NATURE,
+                           description = "Connection factory nature for the broker.",
+                           type = DataType.STRING,
+                           optional = true,
+                           defaultValue = "default")
+        },
+        examples = {
+                @Example(description = "Following example illustrates how to connect to an ActiveMQ topic and "
+                        + "receive messages.",
+                         syntax = "@source(type='jms', @map(type='json'), "
+                                 + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
+                                 + "provider.url='tcp://localhost:61616',"
+                                 + "destination='DAS_JMS_TEST', "
+                                 + "connection.factory.type='topic',"
+                                 + "connection.factory.jndi.name='TopicConnectionFactory'"
+                                 + ")" +
+                                 "define stream inputStream (name string, age int, country string);"),
+                @Example(description = "Following example illustrates how to connect to an ActiveMQ queue and "
+                        + "receive messages. Note that we are not providing properties like connection factory type",
+                         syntax = "@source(type='jms', @map(type='json'), "
+                                 + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
+                                 + "provider.url='tcp://localhost:61616',"
+                                 + "destination='DAS_JMS_TEST' "
+                                 + ")" +
+                                 "define stream inputStream (name string, age int, country string);")
+        }
 )
 public class JMSSource extends Source {
     private static final Logger log = Logger.getLogger(JMSSource.class);
@@ -63,8 +155,6 @@ public class JMSSource extends Source {
                      SiddhiAppContext siddhiAppContext) {
         this.sourceEventListener = sourceEventListener;
         this.optionHolder = optionHolder;
-        concurrentConsumers = Integer.parseInt(optionHolder.validateAndGetStaticValue(THREAD_COUNT,
-                                                                                      DEFAULT_THREAD_COUNT));
         Map<String, String> properties = initJMSProperties();
         jmsServerConnector = new JMSServerConnector(properties);
         jmsMessageProcessor = new JMSMessageProcessor(sourceEventListener, siddhiAppContext,
@@ -134,9 +224,10 @@ public class JMSSource extends Source {
                         optionHolder.validateAndGetStaticValue(requiredOption)));
         // getting optional values
         optionHolder.getStaticOptionsKeys().stream()
-                .filter(option -> !requiredOptions.contains(option) && !option.equals("type")).forEach(option ->
-                transportProperties.put(option, optionHolder.validateAndGetStaticValue(option)));
-        transportProperties.put(JMSConstants.CONCURRENT_CONSUMERS, String.valueOf(concurrentConsumers));
+                .filter(option -> !requiredOptions.contains(option) && !option.equals("type"))
+                .forEach(option -> transportProperties.put(
+                        carbonPropertyMapping.get(option) == null ? option : carbonPropertyMapping.get(option),
+                        optionHolder.validateAndGetStaticValue(option)));
         return transportProperties;
     }
 

@@ -46,9 +46,7 @@ public class JMSSinkTestCase {
                     "@sink(type='jms', @map(type='xml'), "
                     + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
                     + "provider.url='vm://localhost',"
-                    + "destination='DAS_JMS_OUTPUT_TEST', "
-                    + "connection.factory.type='queue',"
-                    + "connection.factory.jndi.name='QueueConnectionFactory'"
+                    + "destination='DAS_JMS_OUTPUT_TEST' "
                     + ")" +
                     "define stream inputStream (name string, age int, country string);";
             executionPlanRuntime = siddhiManager.

@@ -35,6 +35,15 @@ public class JMSOptionsMapper {
     public static final String PROVIDER_URL = "provider.url";
     public static final String CONNECTION_FACTORY_TYPE = "connection.factory.type";
 
+    public static final String WORKER_COUNT = "worker.count";
+    public static final String CONNECTION_USERNAME = "connection.username";
+    public static final String CONNECTION_PASSWORD = "connection.password";
+    public static final String RETRY_INTERVAL = "retry.interval";
+    public static final String MAX_RETRY_COUNT = "retry.count";
+    public static final String USE_RECEIVER = "use.receiver";
+    public static final String PARAM_SUB_DURABLE = "subscription.durable";
+    public static final String CONNECTION_FACTORY_NATURE = "connection.factory.nature";
+
     /**
      * Returns the custom property map mapping the siddhi extension key name to JMS transport key.
      *
@@ -42,11 +51,19 @@ public class JMSOptionsMapper {
      */
     public static Map<String, String> getCarbonPropertyMapping() {
         Map<String, String> carbonPropertyMapping = new HashMap<>();
-        carbonPropertyMapping.put(DESTINATION, JMSConstants.DESTINATION_PARAM_NAME);
-        carbonPropertyMapping.put(CONNECTION_FACTORY_JNDI_NAME, JMSConstants.CONNECTION_FACTORY_JNDI_PARAM_NAME);
-        carbonPropertyMapping.put(FACTORY_INITIAL, JMSConstants.NAMING_FACTORY_INITIAL_PARAM_NAME);
-        carbonPropertyMapping.put(PROVIDER_URL, JMSConstants.PROVIDER_URL_PARAM_NAME);
-        carbonPropertyMapping.put(CONNECTION_FACTORY_TYPE, JMSConstants.CONNECTION_FACTORY_TYPE_PARAM_NAME);
+        carbonPropertyMapping.put(DESTINATION, JMSConstants.PARAM_DESTINATION_NAME);
+        carbonPropertyMapping.put(CONNECTION_FACTORY_JNDI_NAME, JMSConstants.PARAM_CONNECTION_FACTORY_JNDI_NAME);
+        carbonPropertyMapping.put(FACTORY_INITIAL, JMSConstants.PARAM_NAMING_FACTORY_INITIAL);
+        carbonPropertyMapping.put(PROVIDER_URL, JMSConstants.PARAM_PROVIDER_URL);
+        carbonPropertyMapping.put(CONNECTION_FACTORY_TYPE, JMSConstants.PARAM_CONNECTION_FACTORY_TYPE);
+        carbonPropertyMapping.put(WORKER_COUNT, JMSConstants.CONCURRENT_CONSUMERS);
+        carbonPropertyMapping.put(CONNECTION_USERNAME, JMSConstants.CONNECTION_USERNAME);
+        carbonPropertyMapping.put(CONNECTION_PASSWORD, JMSConstants.CONNECTION_PASSWORD);
+        carbonPropertyMapping.put(RETRY_INTERVAL, JMSConstants.RETRY_INTERVAL);
+        carbonPropertyMapping.put(MAX_RETRY_COUNT, JMSConstants.MAX_RETRY_COUNT);
+        carbonPropertyMapping.put(USE_RECEIVER, JMSConstants.USE_RECEIVER);
+        carbonPropertyMapping.put(PARAM_SUB_DURABLE, JMSConstants.PARAM_SUB_DURABLE);
+        carbonPropertyMapping.put(CONNECTION_FACTORY_NATURE, JMSConstants.CONNECTION_FACTORY_NATURE);
         return carbonPropertyMapping;
     }
 
@@ -56,7 +73,6 @@ public class JMSOptionsMapper {
      * @return list of required options.
      */
     public static List<String> getRequiredOptions() {
-        return Arrays.asList(DESTINATION, CONNECTION_FACTORY_JNDI_NAME, FACTORY_INITIAL, FACTORY_INITIAL, PROVIDER_URL,
-                CONNECTION_FACTORY_TYPE);
+        return Arrays.asList(DESTINATION, FACTORY_INITIAL, PROVIDER_URL);
     }
 }
