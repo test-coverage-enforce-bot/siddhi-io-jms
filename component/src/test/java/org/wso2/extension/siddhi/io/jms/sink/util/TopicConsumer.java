@@ -69,6 +69,7 @@ public class TopicConsumer implements Runnable {
             while (active) {
                 Message message = consumer.receive(1000);
                 if (message != null) {
+                    resultContainer.eventReceived(message);
                     if (message instanceof MapMessage) {
                         MapMessage mapMessage = (MapMessage) message;
                         Map<String, Object> map = new HashMap<String, Object>();

@@ -193,7 +193,8 @@ public class JMSSink extends Sink {
         // getting optional values
         optionHolder.getStaticOptionsKeys().stream()
                 .filter(option -> !requiredOptions.contains(option) && !option.equals("type")).forEach(option ->
-                transportProperties.put(option, optionHolder.validateAndGetStaticValue(option)));
+                transportProperties.put(customPropertyMapping.get(option), optionHolder.validateAndGetStaticValue
+                        (option)));
         return transportProperties;
     }
 }

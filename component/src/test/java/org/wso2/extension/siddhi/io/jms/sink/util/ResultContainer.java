@@ -34,12 +34,20 @@ public class ResultContainer {
     private int eventCount;
     private List<String> results;
     private CountDownLatch latch;
+    private int timeout = 60;
 
 
     public ResultContainer(int expectedEventCount) {
         eventCount = 0;
         results = new ArrayList<>(expectedEventCount);
         latch = new CountDownLatch(expectedEventCount);
+    }
+
+    public ResultContainer(int expectedEventCount, int timeoutInSeconds) {
+        eventCount = 0;
+        results = new ArrayList<>(expectedEventCount);
+        latch = new CountDownLatch(expectedEventCount);
+        timeout = timeoutInSeconds;
     }
 
     public void eventReceived(Message message) {
@@ -50,7 +58,7 @@ public class ResultContainer {
 
     public void waitForResult() {
         try {
-            latch.await(1, TimeUnit.MINUTES);
+            latch.await(timeout, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
@@ -58,7 +66,7 @@ public class ResultContainer {
 
     public Boolean assertMessageContent(String content) {
         try {
-            if (latch.await(1, TimeUnit.MINUTES)) {
+            if (latch.await(timeout, TimeUnit.SECONDS)) {
                 for (String message : results) {
                     if (message.contains(content)) {
                         return true;
@@ -66,7 +74,7 @@ public class ResultContainer {
                 }
                 return false;
             } else {
-                log.error("Expected number of results not received. Only received " + eventCount + "events.");
+                log.error("Expected number of results not received. Only received " + eventCount + " events.");
                 return false;
             }
 

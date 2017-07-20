@@ -73,6 +73,6 @@ public class JMSOptionsMapper {
      * @return list of required options.
      */
     public static List<String> getRequiredOptions() {
-        return Arrays.asList(DESTINATION, FACTORY_INITIAL, PROVIDER_URL);
+        return Arrays.asList(DESTINATION,  PROVIDER_URL);
     }
 }

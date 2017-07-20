@@ -24,7 +24,9 @@ import org.wso2.extension.siddhi.io.jms.sink.util.JMSClient;
 import org.wso2.extension.siddhi.io.jms.sink.util.ResultContainer;
 import org.wso2.siddhi.core.SiddhiAppRuntime;
 import org.wso2.siddhi.core.SiddhiManager;
+import org.wso2.siddhi.core.exception.SiddhiAppCreationException;
 import org.wso2.siddhi.core.stream.input.InputHandler;
+import org.wso2.siddhi.query.api.exception.SiddhiAppValidationException;
 
 public class JMSSinkTestCase {
 
@@ -32,6 +34,45 @@ public class JMSSinkTestCase {
 
     @Test
     public void jmsTopicPublishTest() throws InterruptedException {
+        SiddhiAppRuntime executionPlanRuntime = null;
+        ResultContainer resultContainer = new ResultContainer(2);
+        JMSClient client = new JMSClient("activemq",  "DAS_JMS_OUTPUT_TEST", "", resultContainer);
+        try {
+            //init
+            Thread listenerThread = new Thread(client);
+            listenerThread.start();
+
+            // deploying the execution plan
+            SiddhiManager siddhiManager = new SiddhiManager();
+            String inStreamDefinition = "" +
+                    "@sink(type='jms', @map(type='xml'), "
+                    + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
+                    + "provider.url='vm://localhost',"
+                    + "destination='DAS_JMS_OUTPUT_TEST',"
+                    + "connection.factory.jndi.name='TopicConnectionFactory',"
+                    + "connection.factory.type='topic',"
+                    + "subscription.durable='true' "
+                    + ")" +
+                    "define stream inputStream (name string, age int, country string);";
+            executionPlanRuntime = siddhiManager.
+                    createSiddhiAppRuntime(inStreamDefinition);
+            InputHandler inputStream = executionPlanRuntime.getInputHandler("inputStream");
+            executionPlanRuntime.start();
+            inputStream.send(new Object[]{"JAMES", 23, "USA"});
+            inputStream.send(new Object[]{"MIKE", 23, "Germany"});
+
+            Assert.assertTrue(resultContainer.assertMessageContent("JAMES"));
+            Assert.assertTrue(resultContainer.assertMessageContent("MIKE"));
+        } finally {
+            client.shutdown();
+            if (executionPlanRuntime != null) {
+                executionPlanRuntime.shutdown();
+            }
+        }
+    }
+
+    @Test
+    public void jmsTopicPublishTest1() throws InterruptedException {
         SiddhiAppRuntime executionPlanRuntime = null;
         ResultContainer resultContainer = new ResultContainer(2);
         JMSClient client = new JMSClient("activemq", "", "DAS_JMS_OUTPUT_TEST", resultContainer);
@@ -43,7 +84,7 @@ public class JMSSinkTestCase {
             // deploying the execution plan
             SiddhiManager siddhiManager = new SiddhiManager();
             String inStreamDefinition = "" +
-                    "@sink(type='jms', @map(type='xml'), "
+                    "@sink(type='jms', @map(type='json'), "
                     + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
                     + "provider.url='vm://localhost',"
                     + "destination='DAS_JMS_OUTPUT_TEST' "
@@ -58,6 +99,83 @@ public class JMSSinkTestCase {
 
             Assert.assertTrue(resultContainer.assertMessageContent("JAMES"));
             Assert.assertTrue(resultContainer.assertMessageContent("MIKE"));
+        } finally {
+            client.shutdown();
+            if (executionPlanRuntime != null) {
+                executionPlanRuntime.shutdown();
+            }
+        }
+    }
+
+    @Test(expectedExceptions = SiddhiAppValidationException.class)
+    public void jmsTopicPublishTest2() throws InterruptedException {
+        SiddhiAppRuntime executionPlanRuntime = null;
+        try {
+
+            // deploying the execution plan
+            SiddhiManager siddhiManager = new SiddhiManager();
+            String inStreamDefinition = "" +
+                    "@sink(type='jms', @map(type='json'), "
+                    + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
+                    + "destination='DAS_JMS_OUTPUT_TEST' "
+                    + ")" +
+                    "define stream inputStream (name string, age int, country string);";
+            executionPlanRuntime = siddhiManager.
+                    createSiddhiAppRuntime(inStreamDefinition);
+        } finally {
+            if (executionPlanRuntime != null) {
+                executionPlanRuntime.shutdown();
+            }
+        }
+    }
+
+    @Test(expectedExceptions = SiddhiAppCreationException.class)
+    public void jmsTopicPublishTest3() throws InterruptedException {
+        SiddhiAppRuntime executionPlanRuntime = null;
+        try {
+
+            // deploying the execution plan
+            SiddhiManager siddhiManager = new SiddhiManager();
+            String inStreamDefinition = "" +
+                    "@sink(type='jms', "
+                    + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
+                    + "provider.url='vm://localhost',"
+                    + "destination='DAS_JMS_OUTPUT_TEST' "
+                    + ")" +
+                    "define stream inputStream (name string, age int, country string);";
+            executionPlanRuntime = siddhiManager.
+                    createSiddhiAppRuntime(inStreamDefinition);
+        } finally {
+            if (executionPlanRuntime != null) {
+                executionPlanRuntime.shutdown();
+            }
+        }
+    }
+
+    @Test
+    public void jmsTopicPublishTest4() throws InterruptedException {
+        SiddhiAppRuntime executionPlanRuntime = null;
+        ResultContainer resultContainer = new ResultContainer(2, 15);
+        JMSClient client = new JMSClient("activemq", "", "DAS_JMS_OUTPUT_TEST", resultContainer);
+        try {
+
+            // deploying the execution plan
+            SiddhiManager siddhiManager = new SiddhiManager();
+            String inStreamDefinition = "" +
+                    "@sink(type='jms', @map(type='xml'),"
+                    + "factory.initial='org.wso2.activemq.jndi.ActiveMQInitialContextFactory11', "
+                    + "provider.url='vm://localhost',"
+                    + "destination='DAS_JMS_OUTPUT_TEST' "
+                    + ")" +
+                    "define stream inputStream (name string, age int, country string);";
+            executionPlanRuntime = siddhiManager.
+                    createSiddhiAppRuntime(inStreamDefinition);
+            InputHandler inputStream = executionPlanRuntime.getInputHandler("inputStream");
+            executionPlanRuntime.start();
+            inputStream.send(new Object[]{"JAMES", 23, "USA"});
+            inputStream.send(new Object[]{"MIKE", 23, "Germany"});
+            Assert.assertFalse(resultContainer.assertMessageContent("JAMES"));
+            Assert.assertFalse(resultContainer.assertMessageContent("MIKE"));
         } finally {
             client.shutdown();
             if (executionPlanRuntime != null) {
