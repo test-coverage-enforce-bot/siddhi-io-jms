@@ -71,7 +71,7 @@ public class JMSSinkTestCase {
         }
     }
 
-    @Test
+    @Test(dependsOnMethods = "jmsTopicPublishTest")
     public void jmsTopicPublishTest1() throws InterruptedException {
         SiddhiAppRuntime executionPlanRuntime = null;
         ResultContainer resultContainer = new ResultContainer(2);
@@ -152,10 +152,10 @@ public class JMSSinkTestCase {
         }
     }
 
-    @Test
+    @Test(dependsOnMethods = "jmsTopicPublishTest1")
     public void jmsTopicPublishTest4() throws InterruptedException {
         SiddhiAppRuntime executionPlanRuntime = null;
-        ResultContainer resultContainer = new ResultContainer(2, 15);
+        ResultContainer resultContainer = new ResultContainer(2, 5);
         JMSClient client = new JMSClient("activemq", "", "DAS_JMS_OUTPUT_TEST", resultContainer);
         try {
 
@@ -175,9 +175,7 @@ public class JMSSinkTestCase {
             inputStream.send(new Object[]{"JAMES", 23, "USA"});
             inputStream.send(new Object[]{"MIKE", 23, "Germany"});
             Assert.assertFalse(resultContainer.assertMessageContent("JAMES"));
-            Assert.assertFalse(resultContainer.assertMessageContent("MIKE"));
         } finally {
-            client.shutdown();
             if (executionPlanRuntime != null) {
                 executionPlanRuntime.shutdown();
             }

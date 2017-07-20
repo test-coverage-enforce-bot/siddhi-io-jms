@@ -34,7 +34,7 @@ public class ResultContainer {
     private int eventCount;
     private List<String> results;
     private CountDownLatch latch;
-    private int timeout = 60;
+    private int timeout = 90;
 
 
     public ResultContainer(int expectedEventCount) {
@@ -51,9 +51,9 @@ public class ResultContainer {
     }
 
     public void eventReceived(Message message) {
-        latch.countDown();
         eventCount++;
         results.add(message.toString());
+        latch.countDown();
     }
 
     public void waitForResult() {

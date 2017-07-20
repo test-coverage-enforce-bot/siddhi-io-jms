@@ -104,7 +104,7 @@ public class JMSSourceTestCase {
         siddhiManager.shutdown();
     }
 
-    @Test
+    @Test(dependsOnMethods = "testJMSTopicSource1")
     public void testJMSTopicSource2() throws InterruptedException {
         AtomicInteger eventCount = new AtomicInteger(0);
         receivedEventNameList = new ArrayList<>(2);
@@ -168,7 +168,7 @@ public class JMSSourceTestCase {
     }
 
 
-    @Test
+    @Test(dependsOnMethods = "testJMSTopicSource2")
     public void testJMSTopicSource3() throws InterruptedException {
         AtomicInteger eventCount = new AtomicInteger(0);
         receivedEventNameList = new ArrayList<>(2);
@@ -218,7 +218,7 @@ public class JMSSourceTestCase {
         siddhiManager.shutdown();
     }
 
-    @Test(expectedExceptions = SiddhiAppValidationException.class)
+    @Test(expectedExceptions = SiddhiAppValidationException.class, dependsOnMethods = "testJMSTopicSource3")
     public void testJMSTopicSource4() throws InterruptedException {
         AtomicInteger eventCount = new AtomicInteger(0);
         receivedEventNameList = new ArrayList<>(2);
