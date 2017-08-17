@@ -11,5 +11,6 @@ pages:
 - License: license.md
 - API Docs:
   - 1.0.4-SNAPSHOT: api/1.0.4-SNAPSHOT.md
+  - 1.0.6-SNAPSHOT: api/1.0.6-SNAPSHOT.md
   - 1.0.5-SNAPSHOT: api/1.0.5-SNAPSHOT.md
 theme: material
