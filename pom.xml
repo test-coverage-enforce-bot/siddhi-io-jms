@@ -115,7 +115,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.8</version>
+                <version>${jacoco.maven.version}</version>
                 <executions>
                     <execution>
                         <id>jacoco-initialize</id>
@@ -154,6 +154,7 @@
         <mavan.findbugsplugin.exclude.file>findbugs-exclude.xml</mavan.findbugsplugin.exclude.file>
         <mavan.checkstyle.suppression.file>checkstyle-suppressions.xml</mavan.checkstyle.suppression.file>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jacoco.maven.version>0.7.8</jacoco.maven.version>
     </properties>
 
     <scm>
