@@ -46,8 +46,7 @@ import java.util.Map;
         name = "jms",
         namespace = "source",
         description = "JMS Source allows users to subscribe to a JMS broker and receive JMS messages. It has the "
-                + "ability to receive Map messages and Text messages. Following described parameters can be used to "
-                + "configure the event source",
+                + "ability to receive Map messages and Text messages.",
         parameters = {
                 @Parameter(name = JMSOptionsMapper.DESTINATION,
                            description = "Queue/Topic name which JMS Source should subscribe to",

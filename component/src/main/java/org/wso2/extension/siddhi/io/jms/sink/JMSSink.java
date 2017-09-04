@@ -49,7 +49,7 @@ import static org.wso2.extension.siddhi.io.jms.util.JMSOptionsMapper.DESTINATION
 @Extension(
         name = "jms",
         namespace = "sink",
-        description = "JMS Output Transport",
+        description = "JMS Sink allows users to subscribe to a JMS broker and publish JMS messages.",
         parameters = {
                 @Parameter(name = JMSOptionsMapper.DESTINATION,
                            description = "Queue/Topic name which JMS Source should subscribe to",
