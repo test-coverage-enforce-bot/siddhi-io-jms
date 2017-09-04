@@ -16,6 +16,5 @@ pages:
 - Welcome to WSO2 Siddhi IO JMS: index.md
 - API Docs:
   - 1.0.6-SNAPSHOT: api/1.0.6-SNAPSHOT.md
-  - 4.0.2-SNAPSHOT: api/4.0.2-SNAPSHOT.md
 - License: license.md
 theme: material
