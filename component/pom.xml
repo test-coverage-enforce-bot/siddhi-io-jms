@@ -166,7 +166,7 @@
     </build>
 
     <properties>
-        <xml.mapper.version>4.0.0</xml.mapper.version>
+        <xml.mapper.version>4.0.1</xml.mapper.version>
         <json.mapper.version>4.0.4</json.mapper.version>
         <mavan.findbugsplugin.exclude.file>../findbugs-exclude.xml</mavan.findbugsplugin.exclude.file>
     </properties>
