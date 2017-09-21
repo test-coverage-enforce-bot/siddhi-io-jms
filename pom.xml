@@ -28,7 +28,7 @@
 
     <groupId>org.wso2.extension.siddhi.io.jms</groupId>
     <artifactId>siddhi-io-jms-parent</artifactId>
-    <version>1.0.8-SNAPSHOT</version>
+    <version>1.0.8</version>
     <name>Siddhi IO JMS Extension Parent</name>
 
     <modules>       
@@ -161,7 +161,7 @@
         <url>https://github.com/wso2-extensions/siddhi-io-jms.git</url>
         <developerConnection>scm:git:https://github.com/wso2-extensions/siddhi-io-jms.git</developerConnection>
         <connection>scm:git:https://github.com/wso2-extensions/siddhi-io-jms.git</connection>
-        <tag>HEAD</tag>
+        <tag>v1.0.8</tag>
     </scm>
 
 </project>
