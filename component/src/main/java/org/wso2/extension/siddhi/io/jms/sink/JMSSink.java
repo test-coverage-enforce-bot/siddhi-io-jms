@@ -34,6 +34,8 @@ import org.wso2.siddhi.core.util.transport.Option;
 import org.wso2.siddhi.core.util.transport.OptionHolder;
 import org.wso2.siddhi.query.api.definition.StreamDefinition;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -121,7 +123,7 @@ public class JMSSink extends Sink {
 
     @Override
     protected void init(StreamDefinition outputStreamDefinition, OptionHolder optionHolder,
-                        ConfigReader sinkConfigReader, SiddhiAppContext executionPlanContext) {
+            ConfigReader sinkConfigReader, SiddhiAppContext executionPlanContext) {
         this.optionHolder = optionHolder;
         this.destination = optionHolder.getOrCreateOption(DESTINATION, null);
         this.jmsStaticProperties = initJMSProperties();
@@ -151,13 +153,15 @@ public class JMSSink extends Sink {
         } catch (RejectedExecutionException e) {
             //No need to retry as we are using an unbounded queue. Only place this can happen is when the executor
             // service is shutting down. In such cases we can't anyway handle the exception. Hence logging.
-            log.error("Error occured when submitting following payload to be published via JMS. Payload : " + payload
-                    .toString(), e);
+            log.error("Error occured when submitting following payload to be published via JMS. Payload : "
+                    + payload.toString(), e);
+        } catch (UnsupportedEncodingException e) {
+            log.error("Received payload does not support UTF-8 encoding. Hence dropping the event." , e);
         }
     }
 
     @Override public Class[] getSupportedInputEventClasses() {
-        return new Class[]{String.class, Map.class, Byte[].class};
+        return new Class[]{String.class, Map.class, ByteBuffer.class};
     }
 
     @Override
