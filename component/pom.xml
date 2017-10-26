@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.wso2.extension.siddhi.io.jms</groupId>
         <artifactId>siddhi-io-jms-parent</artifactId>
-        <version>1.0.10-SNAPSHOT</version>
+        <version>1.0.11-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -200,8 +200,8 @@
     </build>
 
     <properties>
-        <xml.mapper.version>4.0.2</xml.mapper.version>
-        <json.mapper.version>4.0.6</json.mapper.version>
+        <xml.mapper.version>4.0.5</xml.mapper.version>
+        <json.mapper.version>4.0.8</json.mapper.version>
         <mavan.findbugsplugin.exclude.file>../findbugs-exclude.xml</mavan.findbugsplugin.exclude.file>
     </properties>
 </project>

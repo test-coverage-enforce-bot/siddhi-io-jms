@@ -28,7 +28,7 @@
 
     <groupId>org.wso2.extension.siddhi.io.jms</groupId>
     <artifactId>siddhi-io-jms-parent</artifactId>
-    <version>1.0.10-SNAPSHOT</version>
+    <version>1.0.11-SNAPSHOT</version>
     <name>Siddhi IO JMS Extension Parent</name>
 
     <modules>       
@@ -131,7 +131,7 @@
         </plugins>
     </build>
     <properties>
-        <siddhi.version>4.0.0-M106</siddhi.version>
+        <siddhi.version>4.0.0-M114</siddhi.version>
         <log4j.version>1.2.17.wso2v1</log4j.version>
         <junit.version>4.12</junit.version>
         <carbon.feature.plugin.version>3.0.0</carbon.feature.plugin.version>
