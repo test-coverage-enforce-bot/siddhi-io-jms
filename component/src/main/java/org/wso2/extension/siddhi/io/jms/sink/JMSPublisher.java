@@ -26,6 +26,8 @@ import org.wso2.carbon.messaging.exceptions.ClientConnectorException;
 import org.wso2.carbon.transport.jms.sender.JMSClientConnector;
 import org.wso2.carbon.transport.jms.utils.JMSConstants;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,7 +47,7 @@ public class JMSPublisher implements Runnable {
     private CarbonMessage message;
 
     public JMSPublisher(String destination, Map<String, String> staticJMSProperties,
-                        JMSClientConnector jmsClientConnector, Object payload) {
+            JMSClientConnector jmsClientConnector, Object payload) throws UnsupportedEncodingException {
         this.jmsProperties = new HashMap<>();
         this.jmsProperties.putAll(staticJMSProperties);
         this.jmsProperties.put(JMSConstants.PARAM_DESTINATION_NAME, destination);
@@ -62,7 +64,8 @@ public class JMSPublisher implements Runnable {
         }
     }
 
-    private CarbonMessage handleCarbonMessage(Object payload) {
+    private CarbonMessage handleCarbonMessage(Object payload) throws UnsupportedEncodingException {
+
         if (payload instanceof String) {
             CarbonMessage textCarbonMessage = new TextCarbonMessage(payload.toString());
             this.jmsProperties.put(MESSAGE_TYPE_FIELD, TEXT_MESSAGE_TYPE);
@@ -73,13 +76,18 @@ public class JMSPublisher implements Runnable {
                 mapCarbonMessage.setValue((String) key, (String) value);
             });
             return mapCarbonMessage;
-        } else if (payload instanceof Byte[]) {
-            TextCarbonMessage byteCarbonMessage = new TextCarbonMessage(payload.toString());
+        } else if (payload instanceof ByteBuffer) {
+            byte[]  data = ((ByteBuffer) payload).array();
+            String text = new String(data, "UTF-8");
+            TextCarbonMessage byteCarbonMessage = new TextCarbonMessage(text);
             this.jmsProperties.put(MESSAGE_TYPE_FIELD, BYTE_ARRAY_MESSAGE_TYPE);
+            log.info(byteCarbonMessage.getMessageBody());
             return byteCarbonMessage;
+
         } else {
-            throw new RuntimeException(
+            throw new UnsupportedEncodingException(
                     "The type of the output payload cannot be cast to String, Map or Byte[] from JMS");
         }
+
     }
 }
