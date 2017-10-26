@@ -85,7 +85,7 @@ public class JMSPublisher implements Runnable {
             return byteCarbonMessage;
 
         } else {
-            throw new RuntimeException(
+            throw new UnsupportedEncodingException(
                     "The type of the output payload cannot be cast to String, Map or Byte[] from JMS");
         }
 
