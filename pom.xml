@@ -28,57 +28,81 @@
 
     <groupId>org.wso2.extension.siddhi.io.jms</groupId>
     <artifactId>siddhi-io-jms-parent</artifactId>
-    <version>1.0.12-SNAPSHOT</version>
+    <version>1.0.10-SNAPSHOT</version>
     <name>Siddhi IO JMS Extension Parent</name>
 
-    <modules>       
+    <modules>
         <module>component</module>
     </modules>
 
     <dependencyManagement>
-            <dependencies>
-                <dependency>
-                    <groupId>org.wso2.siddhi</groupId>
-                    <artifactId>siddhi-core</artifactId>
-                    <version>${siddhi.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.wso2.siddhi</groupId>
-                    <artifactId>siddhi-query-api</artifactId>
-                    <version>${siddhi.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.wso2.siddhi</groupId>
-                    <artifactId>siddhi-annotations</artifactId>
-                    <version>${siddhi.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.log4j.wso2</groupId>
-                    <artifactId>log4j</artifactId>
-                    <version>${log4j.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>junit</groupId>
-                    <artifactId>junit</artifactId>
-                    <scope>test</scope>
-                    <version>${junit.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.geronimo.specs</groupId>
-                    <artifactId>geronimo-jms_1.1_spec</artifactId>
-                    <version>${geronimo-jms.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.geronimo.specs</groupId>
-                    <artifactId>geronimo-jta_1.1_spec</artifactId>
-                    <version>${geronimo-jta.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.wso2.carbon.transport</groupId>
-                    <artifactId>org.wso2.carbon.transport.jms</artifactId>
-                    <version>${carbon.transport.version}</version>
-                </dependency>
-            </dependencies>
+        <dependencies>
+            <dependency>
+                <groupId>org.wso2.siddhi</groupId>
+                <artifactId>siddhi-core</artifactId>
+                <version>${siddhi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.siddhi</groupId>
+                <artifactId>siddhi-query-api</artifactId>
+                <version>${siddhi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.siddhi</groupId>
+                <artifactId>siddhi-annotations</artifactId>
+                <version>${siddhi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.log4j.wso2</groupId>
+                <artifactId>log4j</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <scope>test</scope>
+                <version>${junit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-jms_1.1_spec</artifactId>
+                <version>${geronimo-jms.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-jta_1.1_spec</artifactId>
+                <version>${geronimo-jta.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.transport</groupId>
+                <artifactId>org.wso2.carbon.transport.jms</artifactId>
+                <version>${carbon.transport.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.extension.siddhi.map.binary</groupId>
+                <artifactId>siddhi-map-binary</artifactId>
+                <version>${binary.mapper.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.extension.siddhi.map.xml</groupId>
+                <artifactId>siddhi-map-xml</artifactId>
+                <version>${xml.mapper.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.extension.siddhi.map.json</groupId>
+                <artifactId>siddhi-map-json</artifactId>
+                <version>${json.mapper.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.extension.siddhi.map.keyvalue</groupId>
+                <artifactId>siddhi-map-keyvalue</artifactId>
+                <version>${keyvalue.mapper.version}</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
     </dependencyManagement>
 
     <build>
@@ -131,14 +155,17 @@
         </plugins>
     </build>
     <properties>
-        <siddhi.version>4.0.0-M114</siddhi.version>
+        <siddhi.version>4.0.0-M115</siddhi.version>
         <log4j.version>1.2.17.wso2v1</log4j.version>
         <junit.version>4.12</junit.version>
         <carbon.feature.plugin.version>3.0.0</carbon.feature.plugin.version>
         <geronimo-jms.version>1.1.1</geronimo-jms.version>
         <geronimo-jta.version>1.1.1</geronimo-jta.version>
         <carbon.transport.version>5.0.0-m1</carbon.transport.version>
-
+        <binary.mapper.version>1.0.5</binary.mapper.version>
+        <xml.mapper.version>4.0.5</xml.mapper.version>
+        <json.mapper.version>4.0.8</json.mapper.version>
+        <keyvalue.mapper.version>1.0.4</keyvalue.mapper.version>
         <mavan.findbugsplugin.exclude.file>findbugs-exclude.xml</mavan.findbugsplugin.exclude.file>
         <mavan.checkstyle.suppression.file>checkstyle-suppressions.xml</mavan.checkstyle.suppression.file>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
