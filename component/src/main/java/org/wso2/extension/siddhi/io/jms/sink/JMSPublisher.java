@@ -65,17 +65,20 @@ public class JMSPublisher implements Runnable {
     }
 
     private CarbonMessage handleCarbonMessage(Object payload) throws UnsupportedEncodingException {
-
+        StringBuilder sb = new StringBuilder();
         if (payload instanceof String) {
             CarbonMessage textCarbonMessage = new TextCarbonMessage(payload.toString());
             this.jmsProperties.put(MESSAGE_TYPE_FIELD, TEXT_MESSAGE_TYPE);
             return textCarbonMessage;
         } else if (payload instanceof Map) {
-            MapCarbonMessage mapCarbonMessage = new MapCarbonMessage();
-            ((Map) payload).forEach((key, value) -> {
-                mapCarbonMessage.setValue((String) key, (String) value);
-            });
-            return mapCarbonMessage;
+                MapCarbonMessage mapCarbonMessage = new MapCarbonMessage();
+                ((Map) payload).forEach((key, value) -> {
+                    sb.setLength(0);
+                    sb.append(value);
+                    String valueOfKey = sb.toString();
+                    mapCarbonMessage.setValue((String) key, valueOfKey);
+                });
+                return mapCarbonMessage;
         } else if (payload instanceof ByteBuffer) {
             byte[]  data = ((ByteBuffer) payload).array();
             String text = new String(data, "UTF-8");

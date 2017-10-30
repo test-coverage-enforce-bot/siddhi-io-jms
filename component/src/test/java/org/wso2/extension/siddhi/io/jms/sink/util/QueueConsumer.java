@@ -67,7 +67,6 @@ public class QueueConsumer implements Runnable {
             while (active) {
                 Message message = consumer.receive(1000);
                 if (message != null) {
-                    resultContainer.eventReceived(message);
                     if (message instanceof MapMessage) {
                         MapMessage mapMessage = (MapMessage) message;
                         Map<String, Object> map = new HashMap<String, Object>();
@@ -76,10 +75,13 @@ public class QueueConsumer implements Runnable {
                             String key = (String) enumeration.nextElement();
                             map.put(key, mapMessage.getObject(key));
                         }
+                        resultContainer.eventReceived(map.toString());
                         log.info("Received Map Message: " + map);
                     } else if (message instanceof TextMessage) {
+                        resultContainer.eventReceived(message.toString());
                         log.info("Received Text Message: " + ((TextMessage) message).getText());
                     } else {
+                        resultContainer.eventReceived(message.toString());
                         log.info("Received message: " + message.toString());
                     }
                 }

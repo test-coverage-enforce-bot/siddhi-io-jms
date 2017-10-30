@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import javax.jms.Message;
 
 /**
  * Class to retain results received by JMS client so that tests can poll the result and assert against.
@@ -50,7 +49,7 @@ public class ResultContainer {
         timeout = timeoutInSeconds;
     }
 
-    public void eventReceived(Message message) {
+    public void eventReceived(String message) {
         eventCount++;
         results.add(message.toString());
         latch.countDown();
@@ -83,6 +82,5 @@ public class ResultContainer {
         }
         return false;
     }
-
-
 }
+
