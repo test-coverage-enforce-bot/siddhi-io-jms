@@ -109,7 +109,6 @@ public class JMSSinkTestCase {
     public void jmsTopicPublishTest4() throws InterruptedException {
         SiddhiAppRuntime executionPlanRuntime = null;
         ResultContainer resultContainer = new ResultContainer(2, 5);
-        JMSClient client = new JMSClient("activemq", "", "DAS_JMS_OUTPUT_TEST", resultContainer);
         try {
 
             // deploying the execution plan

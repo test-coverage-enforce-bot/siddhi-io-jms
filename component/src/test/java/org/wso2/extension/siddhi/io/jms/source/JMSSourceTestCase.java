@@ -57,12 +57,17 @@ public class JMSSourceTestCase {
         SiddhiManager siddhiManager = new SiddhiManager();
         String inStreamDefinition = "" + "@source(type='jms', @map(type='xml'), "
                 + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
-                + "provider.url='vm://localhost'," + "destination='DAS_JMS_TEST', " + "connection.factory.type='topic',"
+                + "provider.url='vm://localhost'," + "destination='DAS_JMS_TEST', "
+                + "connection.factory.type='topic',"
                 + "connection.factory.jndi.name='TopicConnectionFactory',"
                 + "transport.jms.SubscriptionDurable='true', "
-                + "transport.jms.DurableSubscriberClientID='wso2dasclient1'" + ")"
+                + "transport.jms.DurableSubscriberClientID='wso2dasclient1'"
+                + ")"
                 + "define stream inputStream (name string, age int, country string);";
-        String query = ("@info(name = 'query1') " + "from inputStream " + "select *  " + "insert into outputStream;");
+        String query = ("@info(name = 'query1') "
+                + "from inputStream "
+                + "select *  "
+                + "insert into outputStream;");
         SiddhiAppRuntime executionPlanRuntime = siddhiManager.createSiddhiAppRuntime(inStreamDefinition + query);
 
         executionPlanRuntime.addCallback("query1", new QueryCallback() {
@@ -110,14 +115,20 @@ public class JMSSourceTestCase {
 
         // deploying the execution plan
         SiddhiManager siddhiManager = new SiddhiManager();
-        String inStreamDefinition = "" + "@source(type='jms', @map(type='xml'), "
+        String inStreamDefinition = ""
+                + "@source(type='jms', @map(type='xml'), "
                 + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
-                + "provider.url='vm://localhost'," + "destination='DAS_JMS_TEST', " + "connection.factory.type='topic',"
+                + "provider.url='vm://localhost'," + "destination='DAS_JMS_TEST', "
+                + "connection.factory.type='topic',"
                 + "connection.factory.jndi.name='TopicConnectionFactory',"
                 + "transport.jms.SubscriptionDurable='true', "
-                + "transport.jms.DurableSubscriberClientID='wso2dasclient1'" + ")"
+                + "transport.jms.DurableSubscriberClientID='wso2dasclient1'"
+                + ")"
                 + "define stream inputStream (name string, age int, country string);";
-        String query = ("@info(name = 'query1') " + "from inputStream " + "select *  " + "insert into outputStream;");
+        String query = ("@info(name = 'query1') "
+                + "from inputStream "
+                + "select *  "
+                + "insert into outputStream;");
         SiddhiAppRuntime executionPlanRuntime = siddhiManager.createSiddhiAppRuntime(inStreamDefinition + query);
 
         executionPlanRuntime.addCallback("query1", new QueryCallback() {
@@ -164,11 +175,17 @@ public class JMSSourceTestCase {
 
         // deploying the execution plan
         SiddhiManager siddhiManager = new SiddhiManager();
-        String inStreamDefinition = "" + "@source(type='jms', @map(type='json'), "
+        String inStreamDefinition = ""
+                + "@source(type='jms', @map(type='json'), "
                 + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
-                + "provider.url='vm://localhost'," + "destination='DAS_JMS_TEST' " + ")"
+                + "provider.url='vm://localhost',"
+                + "destination='DAS_JMS_TEST' "
+                + ")"
                 + "define stream inputStream (name string, age int, country string);";
-        String query = ("@info(name = 'query1') " + "from inputStream " + "select *  " + "insert into outputStream;");
+        String query = ("@info(name = 'query1') "
+                + "from inputStream "
+                + "select *  "
+                + "insert into outputStream;");
         SiddhiAppRuntime executionPlanRuntime = siddhiManager.createSiddhiAppRuntime(inStreamDefinition + query);
 
         executionPlanRuntime.addCallback("query1", new QueryCallback() {
@@ -207,13 +224,17 @@ public class JMSSourceTestCase {
 
         // deploying the execution plan
         SiddhiManager siddhiManager = new SiddhiManager();
-        String inStreamDefinition = "" + "@source(type='jms', @map(type='xml'), " + "provider.url='vm://localhost',"
+        String inStreamDefinition = "" + "@source(type='jms', @map(type='xml'), "
+                + "provider.url='vm://localhost',"
                 + "destination='DAS_JMS_TEST', " + "connection.factory.type='topic',"
                 + "connection.factory.jndi.name='TopicConnectionFactory',"
                 + "transport.jms.SubscriptionDurable='true', "
                 + "transport.jms.DurableSubscriberClientID='wso2dasclient1'" + ")"
                 + "define stream inputStream (name string, age int, country string);";
-        String query = ("@info(name = 'query1') " + "from inputStream " + "select *  " + "insert into outputStream;");
+        String query = ("@info(name = 'query1') "
+                + "from inputStream "
+                + "select *  "
+                + "insert into outputStream;");
         SiddhiAppRuntime executionPlanRuntime = siddhiManager.createSiddhiAppRuntime(inStreamDefinition + query);
 
         executionPlanRuntime.addCallback("query1", new QueryCallback() {
@@ -244,12 +265,16 @@ public class JMSSourceTestCase {
         SiddhiManager siddhiManager = new SiddhiManager();
         String inStreamDefinition = "" + "@source(type='jms', @map(type='xml'), "
                 + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
-                + "provider.url='vm://localhost'," + "destination='DAS_JMS_TEST', " + "connection.factory.type='topic',"
+                + "provider.url='vm://localhost'," + "destination='DAS_JMS_TEST', "
+                + "connection.factory.type='topic',"
                 + "connection.factory.jndi.name='TopicConnectionFactory',"
                 + "transport.jms.SubscriptionDurable='true', "
                 + "transport.jms.DurableSubscriberClientID='wso2dasclient1'" + ")"
                 + "define stream inputStream (name string, age int, country string);";
-        String query = ("@info(name = 'query1') " + "from inputStream " + "select *  " + "insert into outputStream;");
+        String query = ("@info(name = 'query1') "
+                + "from inputStream "
+                + "select *  "
+                + "insert into outputStream;");
         SiddhiAppRuntime executionPlanRuntime = siddhiManager.createSiddhiAppRuntime(inStreamDefinition + query);
 
         executionPlanRuntime.addCallback("query1", new QueryCallback() {
@@ -304,6 +329,7 @@ public class JMSSourceTestCase {
 
     @Test
     public void testJMSTopicSource5() throws InterruptedException {
+        log.info("Test with connection unavailable exception");
         log = Logger.getLogger(Source.class);
         UnitTestAppender appender = new UnitTestAppender();
         log.addAppender(appender);
@@ -315,13 +341,18 @@ public class JMSSourceTestCase {
         // deploying the execution plan
         SiddhiManager siddhiManager = new SiddhiManager();
         String inStreamDefinition = "" + "@source(type='jms', @map(type='xml'),"
-                + "factory.initial='org.apache.mb.jndi.MBInitialContextFactory', " + "provider.url='vm://localhost',"
+                + "factory.initial='org.apache.mb.jndi.MBInitialContextFactory', "
+                + "provider.url='vm://localhost',"
                 + "destination='DAS_JMS_TEST', " + "connection.factory.type='topic',"
                 + "connection.factory.jndi.name='TopicConnectionFactory',"
                 + "transport.jms.SubscriptionDurable='true', "
-                + "transport.jms.DurableSubscriberClientID='wso2dasclient1'" + ")"
+                + "transport.jms.DurableSubscriberClientID='wso2dasclient1'"
+                + ")"
                 + "define stream inputStream (name string, age int, country string);";
-        String query = ("@info(name = 'query1') " + "from inputStream " + "select *  " + "insert into outputStream;");
+        String query = ("@info(name = 'query1') "
+                + "from inputStream "
+                + "select *  "
+                + "insert into outputStream;");
         SiddhiAppRuntime executionPlanRuntime = siddhiManager.createSiddhiAppRuntime(inStreamDefinition + query);
         executionPlanRuntime.start();
         List<String> messageList = new ArrayList<>(2);
@@ -349,12 +380,17 @@ public class JMSSourceTestCase {
         SiddhiManager siddhiManager = new SiddhiManager();
         String inStreamDefinition = "" + "@source(type='jms', @map(type='keyvalue'), "
                 + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
-                + "provider.url='vm://localhost'," + "destination='DAS_JMS_TEST', " + "connection.factory.type='topic',"
+                + "provider.url='vm://localhost'," + "destination='DAS_JMS_TEST', "
+                + "connection.factory.type='topic',"
                 + "connection.factory.jndi.name='TopicConnectionFactory',"
                 + "transport.jms.SubscriptionDurable='false', "
-                + "transport.jms.DurableSubscriberClientID='wso2dasclient1'" + ")"
+                + "transport.jms.DurableSubscriberClientID='wso2dasclient1'"
+                + ")"
                 + "define stream inputStream (name string, age string, country string);";
-        String query = ("@info(name = 'query1') " + "from inputStream " + "select *  " + "insert into outputStream;");
+        String query = ("@info(name = 'query1') "
+                + "from inputStream "
+                + "select *  "
+                + "insert into outputStream;");
         SiddhiAppRuntime executionPlanRuntime = siddhiManager.createSiddhiAppRuntime(inStreamDefinition + query);
 
         executionPlanRuntime.addCallback("query1", new QueryCallback() {
@@ -395,14 +431,18 @@ public class JMSSourceTestCase {
         SiddhiManager siddhiManager = new SiddhiManager();
         String inStreamDefinition =
                 "@source(type='jms'," + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
-                        + "provider.url='vm://localhost'," + "destination='DAS_JMS_TEST', "
-                        + "connection.factory.type='topic'," + "connection.factory.jndi.name='TopicConnectionFactory',"
+                        + "provider.url='vm://localhost',"
+                        + "destination='DAS_JMS_TEST', "
+                        + "connection.factory.type='topic',"
+                        + "connection.factory.jndi.name='TopicConnectionFactory',"
                         + "transport.jms.SubscriptionDurable='false', "
                         + "transport.jms.DurableSubscriberClientID='wso2dasclient1',"
                         + "@map(type='xml',@attributes(name='trp:JMS_DESTINATION',"
                         + "age='age',country='country')))"
                         + "define stream inputStream (name string, age string, country string);";
-        String query = ("@info(name = 'query1') " + "from inputStream " + "select *  " + "insert into outputStream;");
+        String query = ("@info(name = 'query1') "
+                + "from inputStream " + "select *  "
+                + "insert into outputStream;");
         SiddhiAppRuntime executionPlanRuntime = siddhiManager.createSiddhiAppRuntime(inStreamDefinition + query);
 
         executionPlanRuntime.addCallback("query1", new QueryCallback() {
