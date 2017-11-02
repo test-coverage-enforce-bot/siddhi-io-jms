@@ -364,7 +364,7 @@ public class JMSSourceTestCase {
                 + "    </event>\n"
                 + "</events>");
         Thread.sleep(1000);
-        AssertJUnit.assertTrue(appender.getMessages().contains("in starting the JMS receiver"));
+        AssertJUnit.assertTrue(appender.getMessages().contains("Exception in starting the JMS receiver for stream"));
         siddhiManager.shutdown();
     }
 
