@@ -20,7 +20,7 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 
 <suite name="JMS-IO-Test-Suite">
-    <test name="jms-tests" enabled="true" preserve-order="true">
+    <test name="jms-tests" enabled="true" preserve-order="true" parallel="false">
         <classes>
             <class name="org.wso2.extension.siddhi.io.jms.source.JMSSourceTestCase"/>
             <class name="org.wso2.extension.siddhi.io.jms.sink.JMSSinkTestCase"/>

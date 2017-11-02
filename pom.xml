@@ -36,49 +36,69 @@
     </modules>
 
     <dependencyManagement>
-            <dependencies>
-                <dependency>
-                    <groupId>org.wso2.siddhi</groupId>
-                    <artifactId>siddhi-core</artifactId>
-                    <version>${siddhi.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.wso2.siddhi</groupId>
-                    <artifactId>siddhi-query-api</artifactId>
-                    <version>${siddhi.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.wso2.siddhi</groupId>
-                    <artifactId>siddhi-annotations</artifactId>
-                    <version>${siddhi.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.log4j.wso2</groupId>
-                    <artifactId>log4j</artifactId>
-                    <version>${log4j.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>junit</groupId>
-                    <artifactId>junit</artifactId>
-                    <scope>test</scope>
-                    <version>${junit.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.geronimo.specs</groupId>
-                    <artifactId>geronimo-jms_1.1_spec</artifactId>
-                    <version>${geronimo-jms.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.geronimo.specs</groupId>
-                    <artifactId>geronimo-jta_1.1_spec</artifactId>
-                    <version>${geronimo-jta.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>org.wso2.carbon.transport</groupId>
-                    <artifactId>org.wso2.carbon.transport.jms</artifactId>
-                    <version>${carbon.transport.version}</version>
-                </dependency>
-            </dependencies>
+        <dependencies>
+            <dependency>
+                <groupId>org.wso2.siddhi</groupId>
+                <artifactId>siddhi-core</artifactId>
+                <version>${siddhi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.siddhi</groupId>
+                <artifactId>siddhi-query-api</artifactId>
+                <version>${siddhi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.siddhi</groupId>
+                <artifactId>siddhi-annotations</artifactId>
+                <version>${siddhi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.log4j.wso2</groupId>
+                <artifactId>log4j</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <scope>test</scope>
+                <version>${junit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-jms_1.1_spec</artifactId>
+                <version>${geronimo-jms.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-jta_1.1_spec</artifactId>
+                <version>${geronimo-jta.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.transport</groupId>
+                <artifactId>org.wso2.carbon.transport.jms</artifactId>
+                <version>${carbon.transport.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.extension.siddhi.map.binary</groupId>
+                <artifactId>siddhi-map-binary</artifactId>
+                <version>${binary.mapper.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.extension.siddhi.map.xml</groupId>
+                <artifactId>siddhi-map-xml</artifactId>
+                <version>${xml.mapper.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.extension.siddhi.map.json</groupId>
+                <artifactId>siddhi-map-json</artifactId>
+                <version>${json.mapper.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.extension.siddhi.map.keyvalue</groupId>
+                <artifactId>siddhi-map-keyvalue</artifactId>
+                <version>${keyvalue.mapper.version}</version>
+            </dependency>
+        </dependencies>
     </dependencyManagement>
 
     <build>
@@ -138,7 +158,10 @@
         <geronimo-jms.version>1.1.1</geronimo-jms.version>
         <geronimo-jta.version>1.1.1</geronimo-jta.version>
         <carbon.transport.version>5.0.1</carbon.transport.version>
-
+        <binary.mapper.version>1.0.6</binary.mapper.version>
+        <xml.mapper.version>4.0.6</xml.mapper.version>
+        <json.mapper.version>4.0.10</json.mapper.version>
+        <keyvalue.mapper.version>1.0.5</keyvalue.mapper.version>
         <mavan.findbugsplugin.exclude.file>findbugs-exclude.xml</mavan.findbugsplugin.exclude.file>
         <mavan.checkstyle.suppression.file>checkstyle-suppressions.xml</mavan.checkstyle.suppression.file>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
