@@ -17,8 +17,7 @@
   ~ specific language governing permissions and limitations
   ~ under the License.
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>wso2</artifactId>
         <groupId>org.wso2</groupId>
@@ -29,7 +28,7 @@
 
     <groupId>org.wso2.extension.siddhi.io.jms</groupId>
     <artifactId>siddhi-io-jms-parent</artifactId>
-    <version>1.0.15-SNAPSHOT</version>
+    <version>1.0.15</version>
     <name>Siddhi IO JMS Extension Parent</name>
 
     <modules>
@@ -173,7 +172,7 @@
         <url>https://github.com/wso2-extensions/siddhi-io-jms.git</url>
         <developerConnection>scm:git:https://github.com/wso2-extensions/siddhi-io-jms.git</developerConnection>
         <connection>scm:git:https://github.com/wso2-extensions/siddhi-io-jms.git</connection>
-        <tag>HEAD</tag>
+        <tag>v1.0.15</tag>
     </scm>
 
 </project>
