@@ -23,6 +23,7 @@ import org.apache.commons.logging.LogFactory;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import javax.jms.BytesMessage;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
@@ -70,16 +71,22 @@ public class QueueConsumer implements Runnable {
                     if (message instanceof MapMessage) {
                         MapMessage mapMessage = (MapMessage) message;
                         Map<String, Object> map = new HashMap<String, Object>();
-                        Enumeration enumeration = mapMessage.getMapNames();
+                        Enumeration enumeration = mapMessage.getPropertyNames();
                         while (enumeration.hasMoreElements()) {
                             String key = (String) enumeration.nextElement();
-                            map.put(key, mapMessage.getObject(key));
+                            map.put(key, mapMessage.getStringProperty(key));
                         }
                         resultContainer.eventReceived(map.toString());
                         log.info("Received Map Message: " + map);
                     } else if (message instanceof TextMessage) {
                         resultContainer.eventReceived(message.toString());
                         log.info("Received Text Message: " + ((TextMessage) message).getText());
+                    } else if (message instanceof BytesMessage) {
+                        byte[] byteData = null;
+                        byteData = new byte[(int) ((BytesMessage) message).getBodyLength()];
+                        ((BytesMessage) message).readBytes(byteData);
+                        ((BytesMessage) message).reset();
+                        resultContainer.eventReceived(new String(byteData));
                     } else {
                         resultContainer.eventReceived(message.toString());
                         log.info("Received message: " + message.toString());

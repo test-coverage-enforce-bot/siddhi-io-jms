@@ -23,6 +23,7 @@ import org.apache.commons.logging.LogFactory;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import javax.jms.BytesMessage;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
@@ -82,6 +83,12 @@ public class TopicConsumer implements Runnable {
                     } else if (message instanceof TextMessage) {
                         resultContainer.eventReceived(message.toString());
                         log.info("Received Text Message : " + ((TextMessage) message).getText());
+                    } else if (message instanceof BytesMessage) {
+                        byte[] byteData = null;
+                        byteData = new byte[(int) ((BytesMessage) message).getBodyLength()];
+                        ((BytesMessage) message).readBytes(byteData);
+                        ((BytesMessage) message).reset();
+                        resultContainer.eventReceived(new String(byteData));
                     } else {
                         resultContainer.eventReceived(message.toString());
                         log.info("Received message : " + message.toString());

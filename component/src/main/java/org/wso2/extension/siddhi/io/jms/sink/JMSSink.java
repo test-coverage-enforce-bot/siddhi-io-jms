@@ -19,7 +19,9 @@
 package org.wso2.extension.siddhi.io.jms.sink;
 
 import org.apache.log4j.Logger;
-import org.wso2.carbon.transport.jms.sender.JMSClientConnector;
+import org.wso2.carbon.transport.jms.contract.JMSClientConnector;
+import org.wso2.carbon.transport.jms.exception.JMSConnectorException;
+import org.wso2.carbon.transport.jms.impl.JMSConnectorFactoryImpl;
 import org.wso2.extension.siddhi.io.jms.util.JMSOptionsMapper;
 import org.wso2.siddhi.annotation.Example;
 import org.wso2.siddhi.annotation.Extension;
@@ -40,7 +42,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.RejectedExecutionException;
 
 import static org.wso2.extension.siddhi.io.jms.util.JMSOptionsMapper.DESTINATION;
 
@@ -54,63 +55,63 @@ import static org.wso2.extension.siddhi.io.jms.util.JMSOptionsMapper.DESTINATION
         description = "JMS Sink allows users to subscribe to a JMS broker and publish JMS messages.",
         parameters = {
                 @Parameter(name = JMSOptionsMapper.DESTINATION,
-                           description = "Queue/Topic name which JMS Source should subscribe to",
-                           type = DataType.STRING,
-                           dynamic = true
+                        description = "Queue/Topic name which JMS Source should subscribe to",
+                        type = DataType.STRING,
+                        dynamic = true
                 ),
                 @Parameter(name = JMSOptionsMapper.CONNECTION_FACTORY_JNDI_NAME,
-                           description = "JMS Connection Factory JNDI name. This value will be used for the JNDI "
-                                   + "lookup to find the JMS Connection Factory.",
-                           type = DataType.STRING,
-                           optional = true,
-                           defaultValue = "QueueConnectionFactory"),
+                        description = "JMS Connection Factory JNDI name. This value will be used for the JNDI "
+                                + "lookup to find the JMS Connection Factory.",
+                        type = DataType.STRING,
+                        optional = true,
+                        defaultValue = "QueueConnectionFactory"),
                 @Parameter(name = JMSOptionsMapper.FACTORY_INITIAL,
-                           description = "Naming factory initial value",
-                           type = DataType.STRING),
+                        description = "Naming factory initial value",
+                        type = DataType.STRING),
                 @Parameter(name = JMSOptionsMapper.PROVIDER_URL,
-                           description = "Java naming provider URL. Property for specifying configuration "
-                                   + "information for the service provider to use. The value of the property should "
-                                   + "contain a URL string (e.g. \"ldap://somehost:389\")",
-                           type = DataType.STRING),
+                        description = "Java naming provider URL. Property for specifying configuration "
+                                + "information for the service provider to use. The value of the property should "
+                                + "contain a URL string (e.g. \"ldap://somehost:389\")",
+                        type = DataType.STRING),
                 @Parameter(name = JMSOptionsMapper.CONNECTION_FACTORY_TYPE,
-                           description = "Type of the connection connection factory. This can be either queue or "
-                                   + "topic.",
-                           type = DataType.STRING,
-                           optional = true,
-                           defaultValue = "queue"),
+                        description = "Type of the connection connection factory. This can be either queue or "
+                                + "topic.",
+                        type = DataType.STRING,
+                        optional = true,
+                        defaultValue = "queue"),
                 @Parameter(name = JMSOptionsMapper.CONNECTION_USERNAME,
-                           description = "username for the broker.",
-                           type = DataType.STRING,
-                           optional = true,
-                           defaultValue = "None"),
+                        description = "username for the broker.",
+                        type = DataType.STRING,
+                        optional = true,
+                        defaultValue = "None"),
                 @Parameter(name = JMSOptionsMapper.CONNECTION_PASSWORD,
-                           description = "Password for the broker",
-                           type = DataType.STRING,
-                           optional = true,
-                           defaultValue = "None"),
+                        description = "Password for the broker",
+                        type = DataType.STRING,
+                        optional = true,
+                        defaultValue = "None"),
                 @Parameter(name = JMSOptionsMapper.CONNECTION_FACTORY_NATURE,
-                           description = "Connection factory nature for the broker(cached/pooled).",
-                           type = DataType.STRING,
-                           optional = true,
-                           defaultValue = "default")
+                        description = "Connection factory nature for the broker(cached/pooled).",
+                        type = DataType.STRING,
+                        optional = true,
+                        defaultValue = "default")
         },
         examples = {
                 @Example(description = "Following example illustrates how to publish to an ActiveMQ topic.",
-                         syntax = "@sink(type='jms', @map(type='xml'), "
-                                 + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
-                                 + "provider.url='vm://localhost',"
-                                 + "destination='DAS_JMS_OUTPUT_TEST', "
-                                 + "connection.factory.type='topic',"
-                                 + "connection.factory.jndi.name='TopicConnectionFactory'"
-                                 + ")" +
-                                 "define stream inputStream (name string, age int, country string);"),
+                        syntax = "@sink(type='jms', @map(type='xml'), "
+                                + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
+                                + "provider.url='vm://localhost',"
+                                + "destination='DAS_JMS_OUTPUT_TEST', "
+                                + "connection.factory.type='topic',"
+                                + "connection.factory.jndi.name='TopicConnectionFactory'"
+                                + ")" +
+                                "define stream inputStream (name string, age int, country string);"),
                 @Example(description = "Following example illustrates how to publish to an ActiveMQ queue. "
                         + "Note that we are not providing properties like connection factory type",
-                         syntax = "@sink(type='jms', @map(type='xml'), "
-                                 + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
-                                 + "provider.url='vm://localhost',"
-                                 + "destination='DAS_JMS_OUTPUT_TEST')" +
-                                 "define stream inputStream (name string, age int, country string);")
+                        syntax = "@sink(type='jms', @map(type='xml'), "
+                                + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
+                                + "provider.url='vm://localhost',"
+                                + "destination='DAS_JMS_OUTPUT_TEST')" +
+                                "define stream inputStream (name string, age int, country string);")
         }
 )
 public class JMSSink extends Sink {
@@ -123,7 +124,7 @@ public class JMSSink extends Sink {
 
     @Override
     protected void init(StreamDefinition outputStreamDefinition, OptionHolder optionHolder,
-            ConfigReader sinkConfigReader, SiddhiAppContext executionPlanContext) {
+                        ConfigReader sinkConfigReader, SiddhiAppContext executionPlanContext) {
         this.optionHolder = optionHolder;
         this.destination = optionHolder.getOrCreateOption(DESTINATION, null);
         this.jmsStaticProperties = initJMSProperties();
@@ -132,35 +133,25 @@ public class JMSSink extends Sink {
 
     @Override
     public void connect() throws ConnectionUnavailableException {
-        this.clientConnector = new JMSClientConnector();
-    }
-
-    @Override
-    public Map<String, Object> currentState() {
-        return null;
-    }
-
-    @Override
-    public void restoreState(Map<String, Object> state) {
-
+        try {
+            this.clientConnector = new JMSConnectorFactoryImpl().createClientConnector(jmsStaticProperties);
+        } catch (JMSConnectorException e) {
+            log.error("Error connecting to JMS provider. " + e.getMessage());
+        }
     }
 
     @Override
     public void publish(Object payload, DynamicOptions transportOptions) {
         String topicQueueName = destination.getValue(transportOptions);
         try {
-            executorService.submit(new JMSPublisher(topicQueueName, jmsStaticProperties, clientConnector, payload));
-        } catch (RejectedExecutionException e) {
-            //No need to retry as we are using an unbounded queue. Only place this can happen is when the executor
-            // service is shutting down. In such cases we can't anyway handle the exception. Hence logging.
-            log.error("Error occured when submitting following payload to be published via JMS. Payload : "
-                    + payload.toString(), e);
+            new JMSPublisher(topicQueueName, jmsStaticProperties, clientConnector, payload).run();
         } catch (UnsupportedEncodingException e) {
-            log.error("Received payload does not support UTF-8 encoding. Hence dropping the event." , e);
+            log.error("Received payload does not support UTF-8 encoding. Hence dropping the event.", e);
         }
     }
 
-    @Override public Class[] getSupportedInputEventClasses() {
+    @Override
+    public Class[] getSupportedInputEventClasses() {
         return new Class[]{String.class, Map.class, ByteBuffer.class};
     }
 
@@ -171,11 +162,20 @@ public class JMSSink extends Sink {
 
     @Override
     public void disconnect() {
-
     }
 
     @Override
     public void destroy() {
+
+    }
+
+    @Override
+    public Map<String, Object> currentState() {
+        return null;
+    }
+
+    @Override
+    public void restoreState(Map<String, Object> state) {
 
     }
 

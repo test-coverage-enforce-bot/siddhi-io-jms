@@ -24,7 +24,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 /**
  * Used to do the custom mapping from the siddhi extension to JMS Carbon Transport.
  */
@@ -43,7 +42,6 @@ public class JMSOptionsMapper {
     public static final String USE_RECEIVER = "use.receiver";
     public static final String PARAM_SUB_DURABLE = "subscription.durable";
     public static final String CONNECTION_FACTORY_NATURE = "connection.factory.nature";
-
     /**
      * Returns the custom property map mapping the siddhi extension key name to JMS transport key.
      *

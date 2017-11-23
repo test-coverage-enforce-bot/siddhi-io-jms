@@ -214,7 +214,7 @@ public class JMSSourceTestCase {
     }
 
     @Test(expectedExceptions = SiddhiAppValidationException.class,
-          dependsOnMethods = "testJMSTopicSource3")
+            dependsOnMethods = "testJMSTopicSource3")
     public void testJMSTopicSource4() throws InterruptedException {
         AtomicInteger eventCount = new AtomicInteger(0);
         receivedEventNameList = new ArrayList<>(2);
