@@ -18,27 +18,32 @@
  */
 package org.wso2.extension.siddhi.io.jms.source;
 
-import org.wso2.carbon.messaging.CarbonCallback;
-import org.wso2.carbon.messaging.CarbonMessage;
-import org.wso2.carbon.messaging.CarbonMessageProcessor;
-import org.wso2.carbon.messaging.ClientConnector;
-import org.wso2.carbon.messaging.MapCarbonMessage;
-import org.wso2.carbon.messaging.TextCarbonMessage;
-import org.wso2.carbon.messaging.TransportSender;
+import org.wso2.carbon.transport.jms.callback.JMSCallback;
+import org.wso2.carbon.transport.jms.contract.JMSListener;
+import org.wso2.carbon.transport.jms.exception.JMSConnectorException;
+import org.wso2.carbon.transport.jms.utils.JMSConstants;
 import org.wso2.extension.siddhi.io.jms.source.exception.JMSInputAdaptorRuntimeException;
 import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.stream.input.source.SourceEventListener;
 
+import java.nio.ByteBuffer;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.MapMessage;
+import javax.jms.Message;
+import javax.jms.Queue;
+import javax.jms.TextMessage;
+import javax.jms.Topic;
 
 /**
  * This processes the JMS messages using a pausable thread pool.
  */
-public class JMSMessageProcessor implements CarbonMessageProcessor {
+public class JMSMessageProcessor implements JMSListener {
     private SourceEventListener sourceEventListener;
     private boolean paused;
     private ReentrantLock lock;
@@ -54,7 +59,7 @@ public class JMSMessageProcessor implements CarbonMessageProcessor {
     }
 
     @Override
-    public boolean receive(CarbonMessage carbonMessage, CarbonCallback carbonCallback) throws Exception {
+    public void onMessage(Message message, JMSCallback jmsCallback) {
         if (paused) { //spurious wakeup condition is deliberately traded off for performance
             lock.lock();
             try {
@@ -66,41 +71,105 @@ public class JMSMessageProcessor implements CarbonMessageProcessor {
             }
         }
         try {
-            if (carbonMessage.getClass() == TextCarbonMessage.class) {
-                String[] transportProperties = populateTransportHeaders(carbonMessage);
-                String event = ((TextCarbonMessage) carbonMessage).getText();
+            if (message instanceof TextMessage) {
+                String[] transportProperties = populateTransportHeaders(message);
+                String event = ((TextMessage) message).getText();
                 sourceEventListener.onEvent(event, transportProperties);
-            } else if (carbonMessage.getClass() == MapCarbonMessage.class) {
-                String[] transportProperties = populateTransportHeaders(carbonMessage);
+            } else if (message instanceof MapMessage) {
+                String[] transportProperties = populateTransportHeaders(message);
                 Map<String, String> event = new HashMap<>();
-                MapCarbonMessage mapCarbonMessage = (MapCarbonMessage) carbonMessage;
-                Enumeration<String> mapNames = mapCarbonMessage.getMapNames();
+                MapMessage mapEvent = (MapMessage) message;
+                Enumeration<String> mapNames = mapEvent.getMapNames();
                 while (mapNames.hasMoreElements()) {
                     String key = mapNames.nextElement();
-                    event.put(key, mapCarbonMessage.getValue(key));
+                    event.put(key, mapEvent.getString(key));
                 }
                 sourceEventListener.onEvent(event, transportProperties);
+            } else if (message instanceof ByteBuffer) {
+                String[] transportProperties = populateTransportHeaders(message);
+                sourceEventListener.onEvent(message, transportProperties);
             } else {
-                throw new JMSInputAdaptorRuntimeException("The message type of the JMS message" +
-                                                                  carbonMessage.getClass() + " is not supported!");
+                throw new JMSInputAdaptorRuntimeException("The message type of the JMS message"
+                        + message.getClass() + " is not supported!");
             }
             // ACK only if the event is processed i.e: no exceptions thrown from the onEvent method.
-            if (carbonCallback != null) {
-                carbonCallback.done(carbonMessage);
+            if (jmsCallback != null) {
+                jmsCallback.done(true);
             }
-        } catch (RuntimeException e) {
+        } catch (JMSConnectorException | JMSException e) {
             throw new JMSInputAdaptorRuntimeException("Failed to process JMS message.", e);
         }
-        return true;
     }
 
-    private String[] populateTransportHeaders(CarbonMessage carbonMessage) {
-        if (requestedTransportPropertyNames.length > 0) {      //cannot be null according to siddhi impl
+    private String[] populateTransportHeaders(Message message) throws JMSException, JMSConnectorException {
+        if (requestedTransportPropertyNames.length > 0) {
+            //cannot be null according to siddhi impl
+            message.getPropertyNames();
             String[] properties = new String[requestedTransportPropertyNames.length];
             int i = 0;
             for (String property : requestedTransportPropertyNames) {
-                properties[i] = carbonMessage.getHeader(property);      //can be null
-                i++;
+                switch (property) {
+                    case JMSConstants.JMS_REPLY_TO: {
+                        if (message.getJMSReplyTo() != null) {
+                            properties[i] = getDestinationName(message.getJMSReplyTo());
+                            i++;
+                        }
+                        break;
+                    }
+                    case JMSConstants.JMS_DESTINATION: {
+                        if (message.getJMSDestination() != null) {
+                            properties[i] = getDestinationName(message.getJMSDestination());
+                            i++;
+                        }
+                        break;
+                    }
+                    case JMSConstants.JMS_DELIVERY_MODE: {
+                        properties[i] = String.valueOf(message.getJMSDeliveryMode());
+                        i++;
+                        break;
+                    }
+                    case JMSConstants.JMS_CORRELATION_ID: {
+                        properties[i] = message.getJMSCorrelationID();
+                        i++;
+                        break;
+                    }
+                    case JMSConstants.JMS_EXPIRATION: {
+                        properties[i] = String.valueOf(message.getJMSExpiration());
+                        i++;
+                        break;
+                    }
+                    case JMSConstants.JMS_MESSAGE_ID: {
+                        properties[i] = message.getJMSMessageID();
+                        i++;
+                        break;
+                    }
+                    case JMSConstants.JMS_PRIORITY: {
+                        properties[i] = String.valueOf(message.getJMSPriority());
+                        i++;
+                        break;
+                    }
+                    case JMSConstants.JMS_REDELIVERED: {
+                        properties[i] = String.valueOf(message.getJMSRedelivered());
+                        i++;
+                        break;
+                    }
+                    case JMSConstants.JMS_TIMESTAMP: {
+                        properties[i] = String.valueOf(message.getJMSTimestamp());
+                        i++;
+                        break;
+                    }
+                    case JMSConstants.JMS_TYPE: {
+                        properties[i] = message.getJMSType();
+                        i++;
+                        break;
+                    }
+                    default: {
+                        if (message.getStringProperty(property) == null) {
+                            throw new JMSInputAdaptorRuntimeException(String.format("Specified property: %s is "
+                                    + "not available in the message", property));
+                        }
+                    }
+                }
             }
             return properties;
         } else {
@@ -108,17 +177,33 @@ public class JMSMessageProcessor implements CarbonMessageProcessor {
         }
     }
 
-    @Override
-    public void setTransportSender(TransportSender transportSender) {
-    }
+    /**
+     * Returns the name of the destination. The destination can be either a {@link Topic} or {@link Queue}
+     * destination.
+     * <p>
+     * Provided {@link Destination} should be not null.
+     *
+     * @param jmsDestination {@link Destination}.
+     * @return name of the destination.
+     * @throws JMSConnectorException throws when there is an unknown {@link Destination} type is provided or
+     *                               JMS error when trying to retrieve the destination name.
+     */
+    private String getDestinationName(Destination jmsDestination) throws JMSConnectorException {
 
-    @Override
-    public void setClientConnector(ClientConnector clientConnector) {
-    }
-
-    @Override
-    public String getId() {
-        return "JMS-message-processor";
+        String destinationAsString;
+        try {
+            if (jmsDestination instanceof Queue) {
+                destinationAsString = ((Queue) jmsDestination).getQueueName();
+            } else if (jmsDestination instanceof Topic) {
+                destinationAsString = ((Topic) jmsDestination).getTopicName();
+            } else {
+                throw new JMSConnectorException("Unknown JMS destination type. [ " + jmsDestination + " ]");
+            }
+            return destinationAsString;
+        } catch (JMSException e) {
+            throw new JMSConnectorException("Error occurred while retrieving the destination name for " +
+                    "JMS Destination [ " + jmsDestination + " ]", e);
+        }
     }
 
     void pause() {
@@ -137,5 +222,9 @@ public class JMSMessageProcessor implements CarbonMessageProcessor {
 
     void disconnect() {
 
+    }
+
+    @Override
+    public void onError(Throwable throwable) {
     }
 }
