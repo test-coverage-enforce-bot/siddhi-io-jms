@@ -77,12 +77,12 @@ public class JMSMessageProcessor implements JMSListener {
                 sourceEventListener.onEvent(event, transportProperties);
             } else if (message instanceof MapMessage) {
                 String[] transportProperties = populateTransportHeaders(message);
-                Map<String, String> event = new HashMap<>();
+                Map<String, Object> event = new HashMap<>();
                 MapMessage mapEvent = (MapMessage) message;
                 Enumeration<String> mapNames = mapEvent.getMapNames();
                 while (mapNames.hasMoreElements()) {
                     String key = mapNames.nextElement();
-                    event.put(key, mapEvent.getString(key));
+                    event.put(key, mapEvent.getObject(key));
                 }
                 sourceEventListener.onEvent(event, transportProperties);
             } else if (message instanceof ByteBuffer) {
