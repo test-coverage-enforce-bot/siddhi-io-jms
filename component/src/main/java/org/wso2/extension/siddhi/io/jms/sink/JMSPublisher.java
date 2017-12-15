@@ -75,7 +75,7 @@ public class JMSPublisher implements Runnable {
             MapMessage message = (MapMessage) jmsClientConnector.createMessage(JMSConstants.MAP_MESSAGE_TYPE);
             ((Map) payload).forEach((key, value) -> {
                 try {
-                    message.setStringProperty((String) key, String.valueOf(value));
+                    message.setObject((String) key, value);
                 } catch (JMSException e) {
                     log.error("Error while adding into message properties. " + e.getMessage());
                 }

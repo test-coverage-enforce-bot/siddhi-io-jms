@@ -74,7 +74,7 @@ public class QueueConsumer implements Runnable {
                         Enumeration enumeration = mapMessage.getPropertyNames();
                         while (enumeration.hasMoreElements()) {
                             String key = (String) enumeration.nextElement();
-                            map.put(key, mapMessage.getStringProperty(key));
+                            map.put(key, mapMessage.getObject(key));
                         }
                         resultContainer.eventReceived(map.toString());
                         log.info("Received Map Message: " + map);
