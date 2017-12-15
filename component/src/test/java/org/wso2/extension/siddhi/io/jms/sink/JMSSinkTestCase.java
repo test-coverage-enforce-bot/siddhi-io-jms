@@ -218,7 +218,7 @@ public class JMSSinkTestCase {
         }
     }
 
-    @Test
+    @Test(dependsOnMethods = "jmsTopicPublishTest")
     public void jmsTopicPublishTest6() throws InterruptedException {
         SiddhiAppRuntime executionPlanRuntime = null;
         ResultContainer resultContainer = new ResultContainer(2);
@@ -234,7 +234,7 @@ public class JMSSinkTestCase {
             String inStreamDefinition = "" +
                     "@sink(type='jms', @map(type='keyvalue'), "
                     + "factory.initial='org.apache.activemq.jndi.ActiveMQInitialContextFactory', "
-                    + "provider.url='vm://localhost', connection.factory.type='topic', "
+                    + "provider.url='vm://localhost',"
                     + "destination='DAS_JMS_OUTPUT_TEST' "
                     + ")" +
                     "define stream inputStream (name string, age int, country string);";
