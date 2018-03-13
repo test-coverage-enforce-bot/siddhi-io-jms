@@ -19,9 +19,6 @@
 package org.wso2.extension.siddhi.io.jms.sink;
 
 import org.apache.log4j.Logger;
-import org.wso2.carbon.transport.jms.contract.JMSClientConnector;
-import org.wso2.carbon.transport.jms.exception.JMSConnectorException;
-import org.wso2.carbon.transport.jms.impl.JMSConnectorFactoryImpl;
 import org.wso2.extension.siddhi.io.jms.util.JMSOptionsMapper;
 import org.wso2.siddhi.annotation.Example;
 import org.wso2.siddhi.annotation.Extension;
@@ -35,6 +32,9 @@ import org.wso2.siddhi.core.util.transport.DynamicOptions;
 import org.wso2.siddhi.core.util.transport.Option;
 import org.wso2.siddhi.core.util.transport.OptionHolder;
 import org.wso2.siddhi.query.api.definition.StreamDefinition;
+import org.wso2.transport.jms.contract.JMSClientConnector;
+import org.wso2.transport.jms.exception.JMSConnectorException;
+import org.wso2.transport.jms.impl.JMSConnectorFactoryImpl;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;

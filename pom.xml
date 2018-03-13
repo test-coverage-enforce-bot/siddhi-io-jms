@@ -74,9 +74,9 @@
                 <version>${geronimo-jta.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.transport</groupId>
-                <artifactId>org.wso2.carbon.transport.jms</artifactId>
-                <version>${carbon.transport.version}</version>
+                <groupId>org.wso2.transport.jms</groupId>
+                <artifactId>transport-jms</artifactId>
+                <version>${transport.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.extension.siddhi.map.binary</groupId>
@@ -157,7 +157,7 @@
         <carbon.feature.plugin.version>3.1.3</carbon.feature.plugin.version>
         <geronimo-jms.version>1.1.1</geronimo-jms.version>
         <geronimo-jta.version>1.1.1</geronimo-jta.version>
-        <carbon.transport.version>6.0.49</carbon.transport.version>
+        <transport.version>6.0.50</transport.version>
         <binary.mapper.version>1.0.10</binary.mapper.version>
         <xml.mapper.version>4.0.11</xml.mapper.version>
         <json.mapper.version>4.0.15</json.mapper.version>

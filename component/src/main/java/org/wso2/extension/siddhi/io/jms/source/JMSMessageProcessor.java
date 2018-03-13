@@ -18,13 +18,13 @@
  */
 package org.wso2.extension.siddhi.io.jms.source;
 
-import org.wso2.carbon.transport.jms.callback.JMSCallback;
-import org.wso2.carbon.transport.jms.contract.JMSListener;
-import org.wso2.carbon.transport.jms.exception.JMSConnectorException;
-import org.wso2.carbon.transport.jms.utils.JMSConstants;
 import org.wso2.extension.siddhi.io.jms.source.exception.JMSInputAdaptorRuntimeException;
 import org.wso2.siddhi.core.config.SiddhiAppContext;
 import org.wso2.siddhi.core.stream.input.source.SourceEventListener;
+import org.wso2.transport.jms.callback.JMSCallback;
+import org.wso2.transport.jms.contract.JMSListener;
+import org.wso2.transport.jms.exception.JMSConnectorException;
+import org.wso2.transport.jms.utils.JMSConstants;
 
 import java.nio.ByteBuffer;
 import java.util.Enumeration;

@@ -58,8 +58,8 @@
             <artifactId>geronimo-jta_1.1_spec</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon.transport</groupId>
-            <artifactId>org.wso2.carbon.transport.jms</artifactId>
+            <groupId>org.wso2.transport.jms</groupId>
+            <artifactId>transport-jms</artifactId>
         </dependency>
 
         <!-- Test scope -->
@@ -175,9 +175,8 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Private-Package>
-                            org.wso2.carbon.transport.jms.*,
+                            org.wso2.transport.jms.*,
                             org.apache.commons.pool2.*,
-                            org.wso2.carbon.transport.jms.*,
                             org.wso2.carbon.kernel.utils.*
                         </Private-Package>
                         <Export-Package>

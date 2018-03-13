@@ -19,9 +19,9 @@
 package org.wso2.extension.siddhi.io.jms.sink;
 
 import org.apache.log4j.Logger;
-import org.wso2.carbon.transport.jms.contract.JMSClientConnector;
-import org.wso2.carbon.transport.jms.exception.JMSConnectorException;
-import org.wso2.carbon.transport.jms.utils.JMSConstants;
+import org.wso2.transport.jms.contract.JMSClientConnector;
+import org.wso2.transport.jms.exception.JMSConnectorException;
+import org.wso2.transport.jms.utils.JMSConstants;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
