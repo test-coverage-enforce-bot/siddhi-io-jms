@@ -19,9 +19,6 @@
 package org.wso2.extension.siddhi.io.jms.source;
 
 import org.apache.log4j.Logger;
-import org.wso2.carbon.transport.jms.contract.JMSServerConnector;
-import org.wso2.carbon.transport.jms.exception.JMSConnectorException;
-import org.wso2.carbon.transport.jms.receiver.JMSServerConnectorImpl;
 import org.wso2.extension.siddhi.io.jms.util.JMSOptionsMapper;
 import org.wso2.siddhi.annotation.Example;
 import org.wso2.siddhi.annotation.Extension;
@@ -33,6 +30,9 @@ import org.wso2.siddhi.core.stream.input.source.Source;
 import org.wso2.siddhi.core.stream.input.source.SourceEventListener;
 import org.wso2.siddhi.core.util.config.ConfigReader;
 import org.wso2.siddhi.core.util.transport.OptionHolder;
+import org.wso2.transport.jms.contract.JMSServerConnector;
+import org.wso2.transport.jms.exception.JMSConnectorException;
+import org.wso2.transport.jms.receiver.JMSServerConnectorImpl;
 
 import java.util.HashMap;
 import java.util.List;

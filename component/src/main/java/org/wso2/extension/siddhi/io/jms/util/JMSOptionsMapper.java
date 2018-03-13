@@ -18,7 +18,7 @@
  */
 package org.wso2.extension.siddhi.io.jms.util;
 
-import org.wso2.carbon.transport.jms.utils.JMSConstants;
+import org.wso2.transport.jms.utils.JMSConstants;
 
 import java.util.Arrays;
 import java.util.HashMap;
